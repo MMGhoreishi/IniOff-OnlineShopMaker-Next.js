@@ -15,44 +15,35 @@ const Contact = () => {
   });
 
   const contactFormHandler = async (event, { resetForm }) => {
-    const contactData = {};
-    const keyNames = Object.keys(event);
-
-    for (let i = 0; i < keyNames.length; i++) {
-      contactData[keyNames[i]] = event[keyNames[i]];
-    }
-
-    if (contactData)
-      await fetch("/api/contacts", {
-        method: "POST",
-        body: JSON.stringify({ contactData }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then((response) => {
-        if (response.status === 201) {
-          resetForm({ event: "" });
-
-          toast.success("پیام شما با موفقیت ارسال شد و مورد بررسی قرار گرفت", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        } else
-          toast.error("مشکلی در ارسال پیام پیش آمد", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-      });
+    await fetch("/api/contacts", {
+      method: "POST",
+      body: JSON.stringify({ contactData: event }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => {
+      if (response.status === 201) {
+        resetForm({ event: "" });
+        toast.success("پیام شما با موفقیت ارسال شد و مورد بررسی قرار گرفت", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else
+        toast.error("مشکلی در ارسال پیام پیش آمد", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+    });
   };
 
   return (
