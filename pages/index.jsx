@@ -34,7 +34,6 @@ const Home = () => {
 
   return (
     <>
-      <h1>TEST!</h1>
       <AddTitle title="صفحه اصلی" />
       <section id="hero" className="d-flex align-items-center">
         <div className="container">
