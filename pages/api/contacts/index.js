@@ -2,12 +2,6 @@ import { connectDatabase, insertDocument } from "../../../helpers/db-util";
 import { validateEmptyForm } from "../../../helpers/validation";
 
 const handler = async (req, res) => {
-  const validateEmpty = validateEmptyForm(req.body);
-  if (validateEmpty) {
-    res.status(500).json({ message: "All fields are required" });
-    return;
-  }
-
   if (req.method === "POST") {
     let client;
     try {
