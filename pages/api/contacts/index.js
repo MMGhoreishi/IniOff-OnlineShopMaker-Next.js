@@ -1,5 +1,5 @@
 import { connectDatabase, insertDocument } from "../../../helpers/db-util";
-import { validateEmptyForm } from "../../../helpers/validation";
+import { ValidateEmail, validateEmptyForm } from "../../../helpers/validation";
 
 const handler = async (req, res) => {
   if (req.method === "POST") {
@@ -13,6 +13,18 @@ const handler = async (req, res) => {
 
     try {
       const { contactData } = req.body;
+
+      const validateEmpty = validateEmptyForm(contactData);
+      if (validateEmpty) {
+        res.status(500).json({ message: "All fields are required" });
+        return;
+      }
+
+      if (!ValidateEmail(contactData.email)) {
+        res.status(500).json({ message: "The email-format is wrong" });
+        return;
+      }
+
       await insertDocument(client, "contacts", contactData);
       client.close();
       res.status(201).json({ message: "It added the message well!" });
