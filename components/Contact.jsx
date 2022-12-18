@@ -83,7 +83,7 @@ const Contact = () => {
             <Form className="php-email-form">
               <div className="row">
                 <div className="form-group col-md-6">
-                  <label for="name">نام شما</label>
+                  <label for="name">نام و نام خانوادگی شما</label>
                   <Field
                     type="text"
                     name="name"
