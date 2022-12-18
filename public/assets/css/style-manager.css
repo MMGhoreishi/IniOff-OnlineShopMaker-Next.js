@@ -1,0 +1,41 @@
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #0d6efd;
+}
+
+/*--------------------------------------------------------------
+# sign in section
+--------------------------------------------------------------*/
+#sign-in {
+  height: 100vh;
+  background-image: url("../img/mountains.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+#sign-in .dark-cover {
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.281);
+}
+#sign-in input {
+  background-color: rgba(0, 0, 0, 0.123);
+  color: white;
+  border: 1px solid white;
+  box-shadow: none;
+  text-align: center;
+}
+#sign-in input::placeholder {
+  color: white;
+}
+
+/*--------------------------------------------------------------
+# control-panel section
+--------------------------------------------------------------*/
+#control-panel .nav-pills .nav-link {
+  border-radius: 50px;
+}
