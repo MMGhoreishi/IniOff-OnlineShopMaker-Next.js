@@ -6,7 +6,7 @@ import {
   insertDocument,
   findProductsByName,
 } from "../../../helpers/db-util";
-import { validateEmptyForm } from "../../../helpers/validation";
+import { ValidateEmail, validateEmptyForm } from "../../../helpers/validation";
 
 const handler = async (req, res) => {
   const session = await getSession({ req });
@@ -25,14 +25,27 @@ const handler = async (req, res) => {
   }
 
   if (req.method === "POST") {
-    try {
-      const { product } = req.body;
-      const validateEmpty = validateEmptyForm(product);
-      if (validateEmpty) {
-        res.status(500).json({ message: "All fields are required" });
-        return;
-      }
+    const { product } = req.body;
+    const productKeys = [
+      "name",
+      "numberOfDiscounts",
+      "price",
+      "discount",
+      "description",
+      "photo1",
+      "photo2",
+      "photo3",
+      "category",
+    ];
 
+    const result = validateEmptyForm(product, productKeys);
+    if (result) {
+      client.close();
+      res.status(500).json({ message: "All fields are required" });
+      return;
+    }
+
+    try {
       const existingProduct = await findProductsByName(client, product.name);
       if (existingProduct.length > 0) {
         client.close();
@@ -50,6 +63,20 @@ const handler = async (req, res) => {
 
   if (req.method === "PUT") {
     const { profileInfo } = req.body;
+    const profileKeys = ["name", "instagram", "companyName"];
+
+    const result = validateEmptyForm(profileInfo, profileKeys);
+    if (result) {
+      client.close();
+      res.status(500).json({ message: "All fields are required" });
+      return;
+    }
+
+    if (!ValidateEmail(profileInfo.email)) {
+      client.close();
+      res.status(500).json({ message: "The email-format is wrong" });
+      return;
+    }
 
     try {
       const updatedUser = await updateUserProfileByPhoneNumber(
@@ -69,6 +96,12 @@ const handler = async (req, res) => {
 
   if (req.method === "DELETE") {
     const { productId } = req.body;
+
+    if (!productId) {
+      client.close();
+      res.status(500).json({ message: "productId is empty" });
+      return;
+    }
 
     try {
       const deletedProduct = await deleteDocumentById(

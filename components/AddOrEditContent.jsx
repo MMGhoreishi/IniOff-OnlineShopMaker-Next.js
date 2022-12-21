@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { toast } from "react-toastify";
 
 const ACTIONS = {
@@ -31,6 +31,8 @@ const AddOrEditContent = ({
   changeProduct,
   removePreview,
 }) => {
+  const closeRef = useRef();
+
   const [state, dispatch] = useReducer(reducer, {
     getProduct: {
       name: "",
@@ -66,17 +68,17 @@ const AddOrEditContent = ({
 
   const editProduct = async () => {
     //Start-Validation
-    const frmInputKeys = {
-      name: false,
-      numberOfDiscounts: false,
-      price: false,
-      discount: false,
-      description: false,
-      photo1: false,
-      photo2: false,
-      photo3: false,
-      category: false,
-    };
+    const frmInputKeys = [
+      "name",
+      "numberOfDiscounts",
+      "price",
+      "discount",
+      "description",
+      "photo1",
+      "photo2",
+      "photo3",
+      "category",
+    ];
     const result = validateProductFrm(state.getProduct, frmInputKeys);
     const myObjErr = {};
     for (let i = 0; i < result.length; i++) {
@@ -129,17 +131,18 @@ const AddOrEditContent = ({
 
   const addProduct = async () => {
     //Start-Validation
-    const frmInputKeys = {
-      name: false,
-      numberOfDiscounts: false,
-      price: false,
-      discount: false,
-      description: false,
-      photo1: false,
-      photo2: false,
-      photo3: false,
-      category: false,
-    };
+    const frmInputKeys = [
+      "name",
+      "numberOfDiscounts",
+      "price",
+      "discount",
+      "description",
+      "photo1",
+      "photo2",
+      "photo3",
+      "category",
+    ];
+
     const result = validateProductFrm(state.getProduct, frmInputKeys);
     const myObjErr = {};
     for (let i = 0; i < result.length; i++) {
@@ -200,6 +203,8 @@ const AddOrEditContent = ({
             draggable: true,
             progress: undefined,
           });
+
+        if (response.status === 201) closeRef.current.click();
       });
     } catch (err) {
       if (product) changeProduct(allProducts);
@@ -248,16 +253,10 @@ const AddOrEditContent = ({
     });
   };
 
-  const validateProductFrm = (objFields, objKeys) => {
-    const mixObj = { ...objKeys, ...objFields };
-
-    const myFieldsOBJ = Object.values(mixObj);
-    const myFieldsOBJ_KEY = Object.keys(mixObj);
-
+  const validateProductFrm = (objData, objKeys) => {
     const errFields = [];
-
-    for (let i = 0; i < myFieldsOBJ_KEY.length; i++) {
-      if (!myFieldsOBJ[i]) errFields.push(myFieldsOBJ_KEY[i]);
+    for (let i = 0; i < objKeys.length; i++) {
+      if (!objData[objKeys[i]]) errFields.push(objKeys[i]);
     }
 
     return errFields;
@@ -513,6 +512,7 @@ const AddOrEditContent = ({
       <textarea
         className="form-control mb-3"
         rows="5"
+        style={{ padding: 15 }}
         placeholder="توضیحات محصول شما"
         value={state.getProduct.description || ""}
         name="description"
@@ -538,7 +538,6 @@ const AddOrEditContent = ({
             <button
               type="button"
               className="btn btn-add-new-discount"
-              data-bs-dismiss="modal"
               onClick={addProduct}
             >
               ثبت محصول
@@ -548,6 +547,7 @@ const AddOrEditContent = ({
               className="btn btn-cancel"
               data-bs-dismiss="modal"
               onClick={removePreview}
+              ref={closeRef}
             >
               انصراف
             </button>

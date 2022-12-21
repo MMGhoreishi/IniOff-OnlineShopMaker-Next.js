@@ -7,15 +7,6 @@ import {
 import { validateEmptyForm } from "../../../helpers/validation";
 
 const handler = async (req, res) => {
-  const { productId } = req.query;
-  const { Discounts, product } = req.body;
-
-  const validateEmpty = validateEmptyForm({ productId, Discounts, product });
-  if (validateEmpty) {
-    res.status(500).json({ message: "All fields are required" });
-    return;
-  }
-
   const session = await getSession({ req });
 
   if (!session) {
@@ -24,6 +15,32 @@ const handler = async (req, res) => {
   }
 
   if (req.method === "PUT") {
+    const { productId } = req.query;
+    const { product } = req.body;
+
+    if (!productId) {
+      res.status(500).json({ message: "productId is required" });
+      return;
+    }
+
+    const productKeys = [
+      "name",
+      "numberOfDiscounts",
+      "price",
+      "discount",
+      "description",
+      "photo1",
+      "photo2",
+      "photo3",
+      "category",
+    ];
+
+    const result = validateEmptyForm(product, productKeys);
+    if (result) {
+      res.status(500).json({ message: "All fields are required" });
+      return;
+    }
+
     let client;
     try {
       client = await connectDatabase();

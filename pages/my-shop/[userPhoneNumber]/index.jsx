@@ -88,14 +88,6 @@ const UserPN = ({
     newPasswordEye: true,
   });
 
-  const EditProfileSchema = Yup.object().shape({
-    name: Yup.string().required("نام و نام خانوادگی ضروری است"),
-
-    instagram: Yup.string().required("اینستاگرام ضروری است"),
-
-    companyName: Yup.string().required("نام شرکت ضروری است"),
-  });
-
   const UpdatePasswordSchema = Yup.object().shape({
     old_password: Yup.string()
       .required("رمز عبور قبلی ضروری است")
@@ -164,40 +156,45 @@ const UserPN = ({
     }
   };
 
-  const updateProfileInfo = (event) => {
-    event.preventDefault();
+  const updateProfileInfo = async (event) => {
+    console.log("event>>>>>");
+    console.log(event);
 
-    fetch(`/api/my-shop`, {
-      method: "PUT",
-      body: JSON.stringify({ profileInfo: state.getProfileInfo }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => {
-      if (response.status === 200)
-        toast.success(
-          "تبریک ویرایش موفقیت آمیز بود بنابراین حساب شما تحت بررسی کارشناسان می باشد",
-          {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          }
-        );
-      else
-        toast.error("خطایی رخ داد", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-    });
+    console.log("updateProfileInfo_form//////");
+
+    return;
+
+    // fetch(`/api/my-shop`, {
+    //   method: "PUT",
+    //   body: JSON.stringify({ profileInfo: state.getProfileInfo }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // }).then((response) => {
+    //   if (response.status === 200)
+    //     toast.success(
+    //       "تبریک ویرایش موفقیت آمیز بود بنابراین حساب شما تحت بررسی کارشناسان می باشد",
+    //       {
+    //         position: "top-center",
+    //         autoClose: 5000,
+    //         hideProgressBar: false,
+    //         closeOnClick: true,
+    //         pauseOnHover: true,
+    //         draggable: true,
+    //         progress: undefined,
+    //       }
+    //     );
+    //   else
+    //     toast.error("خطایی رخ داد", {
+    //       position: "top-center",
+    //       autoClose: 5000,
+    //       hideProgressBar: false,
+    //       closeOnClick: true,
+    //       pauseOnHover: true,
+    //       draggable: true,
+    //       progress: undefined,
+    //     });
+    // });
   };
 
   const setProducts = (products) => {
@@ -433,138 +430,90 @@ const UserPN = ({
                       </div>
                     </div>
                     {state.profileView === "edit-profile" ? (
-                      <Formik
-                        initialValues={{
-                          name: "",
-                          instagram: "",
-                          company: "",
-                        }}
-                        validationSchema={EditProfileSchema}
-                        onSubmit={updateProfileInfo}
-                      >
-                        {({ touched, errors, isSubmitting, values }) => (
-                          <Form>
-                            <div className="row">
-                              <div className="col-md-6">
-                                <div className="input-group mb-3 input-group-lg">
-                                  <span
-                                    className="input-group-text"
-                                    style={{
-                                      borderRadius: "0 25px 25px 0",
-                                    }}
-                                  >
-                                    <i className="bi bi-person-fill"></i>
-                                  </span>
-                                  <Field
-                                    type="text"
-                                    name="name"
-                                    placeholder="نام و نام خانوادگی"
-                                    style={{
-                                      borderRadius: "25px 0 0 25px",
-                                    }}
-                                    value={state.getProfileInfo.name}
-                                    onChange={handleProfileInfo}
-                                    autocomplete="off"
-                                    className={`form-control
-                          ${touched.name && errors.name ? "is-invalid" : ""}`}
-                                  />
-
-                                  <ErrorMessage
-                                    component="div"
-                                    name="name"
-                                    className="invalid-feedback"
-                                  />
-                                </div>
-                                <div className="input-group mb-3 input-group-lg">
-                                  <span
-                                    className="input-group-text"
-                                    style={{
-                                      borderRadius: "0 25px 25px 0",
-                                    }}
-                                  >
-                                    <i className="bi bi-instagram"></i>
-                                  </span>
-                                  <Field
-                                    type="text"
-                                    name="instagram"
-                                    placeholder="آیدی اینستاگرام شما"
-                                    value={state.getProfileInfo.instagram}
-                                    onChange={handleProfileInfo}
-                                    style={{
-                                      borderRadius: "25px 0 0 25px",
-                                    }}
-                                    autocomplete="off"
-                                    className={`form-control
-                          ${
-                            touched.instagram && errors.instagram
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                                  />
-
-                                  <ErrorMessage
-                                    component="div"
-                                    name="instagram"
-                                    className="invalid-feedback"
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-md-6">
-                                <div className="input-group mb-3 input-group-lg">
-                                  <span
-                                    className="input-group-text"
-                                    style={{
-                                      borderRadius: "0 25px 25px 0",
-                                    }}
-                                  >
-                                    <i className="bi bi-building"></i>
-                                  </span>
-                                  <Field
-                                    type="text"
-                                    name="companyName"
-                                    placeholder="نام شرکت شما"
-                                    style={{
-                                      borderRadius: "25px 0 0 25px",
-                                    }}
-                                    value={state.getProfileInfo.companyName}
-                                    onChange={handleProfileInfo}
-                                    autocomplete="off"
-                                    className={`form-control
-                          ${
-                            touched.companyName && errors.companyName
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                                  />
-
-                                  <ErrorMessage
-                                    component="div"
-                                    name="companyName"
-                                    className="invalid-feedback"
-                                  />
-                                </div>
-                                <div className="d-grid">
-                                  <button
-                                    type="submit"
-                                    className="btn btn-edit-profile btn-block btn-lg"
-                                  >
-                                    <i className="bi bi-pencil-square"></i>{" "}
-                                    ویرایش
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </Form>
-                        )}
-                      </Formik>
+                      <div className="row">
+                        <div className="col-md-6">
+                          <div className="input-group mb-3 input-group-lg">
+                            <span
+                              className="input-group-text"
+                              style={{
+                                borderRadius: "0 25px 25px 0",
+                              }}
+                            >
+                              <i className="bi bi-person-fill"></i>
+                            </span>
+                            <input
+                              type="text"
+                              name="name"
+                              placeholder="نام و نام خانوادگی"
+                              style={{
+                                borderRadius: "25px 0 0 25px",
+                              }}
+                              value={state.getProfileInfo.name}
+                              onChange={handleProfileInfo}
+                              className="form-control"
+                            />
+                          </div>
+                          <div className="input-group mb-3 input-group-lg">
+                            <span
+                              className="input-group-text"
+                              style={{
+                                borderRadius: "0 25px 25px 0",
+                              }}
+                            >
+                              <i className="bi bi-instagram"></i>
+                            </span>
+                            <input
+                              type="text"
+                              name="instagram"
+                              placeholder="آیدی اینستاگرام شما"
+                              value={state.getProfileInfo.instagram}
+                              onChange={handleProfileInfo}
+                              style={{
+                                borderRadius: "25px 0 0 25px",
+                              }}
+                              className="form-control"
+                            />
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <div className="input-group mb-3 input-group-lg">
+                            <span
+                              className="input-group-text"
+                              style={{
+                                borderRadius: "0 25px 25px 0",
+                              }}
+                            >
+                              <i className="bi bi-building"></i>
+                            </span>
+                            <input
+                              type="text"
+                              name="companyName"
+                              placeholder="نام شرکت شما"
+                              style={{
+                                borderRadius: "25px 0 0 25px",
+                              }}
+                              value={state.getProfileInfo.companyName}
+                              onChange={handleProfileInfo}
+                              className="form-control"
+                            />
+                          </div>
+                          <div className="d-grid">
+                            <button
+                              type="button"
+                              className="btn btn-edit-profile btn-block btn-lg"
+                              onClick={updateProfileInfo}
+                            >
+                              <i className="bi bi-pencil-square"></i> ویرایش
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     ) : (
                       <>
                         <Formik
                           initialValues={{
-                            name: "",
-                            email: "",
-                            subject: "",
-                            message: "",
+                            old_password: "",
+                            new_password: "",
                           }}
                           validationSchema={UpdatePasswordSchema}
                           onSubmit={changePasswordHandler}
@@ -653,62 +602,6 @@ const UserPN = ({
                             </Form>
                           )}
                         </Formik>
-                        {/* 
-                        <form onSubmit={changePasswordHandler}>
-                          <div className="row">
-                            <div className="col-md-6">
-                              <div className="input-group mb-3 input-group-lg">
-                                <PasswordInput
-                                  passwordHandler={setOldPasswordEye}
-                                  passwordEye={state.oldPasswordEye}
-                                >
-                                  <input
-                                    placeholder="رمز عبور فعلی"
-                                    style={{
-                                      borderRadius: 0,
-                                    }}
-                                    type={
-                                      state.oldPasswordEye ? "password" : "text"
-                                    }
-                                    className="form-control"
-                                    onChange={setOldPassword}
-                                    name="old-password"
-                                    value={state.oldPassword}
-                                  />
-                                </PasswordInput>
-                              </div>
-                              <div className="input-group mb-3 input-group-lg">
-                                <PasswordInput
-                                  passwordHandler={setNewPasswordEye}
-                                  passwordEye={state.newPasswordEye}
-                                >
-                                  <input
-                                    placeholder="رمز عبور جدید"
-                                    style={{
-                                      borderRadius: 0,
-                                    }}
-                                    type={
-                                      state.newPasswordEye ? "password" : "text"
-                                    }
-                                    className="form-control"
-                                    onChange={setNewPassword}
-                                    name="new-password"
-                                    value={state.newPassword}
-                                  />
-                                </PasswordInput>
-                              </div>
-                              <div className="d-grid">
-                                <button
-                                  type="submit"
-                                  className="btn btn-edit-profile btn-block btn-lg"
-                                >
-                                  <i className="bi bi-gear-wide-connected"></i>{" "}
-                                  تغییر رمز عبور
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </form> */}
                       </>
                     )}
                   </div>
@@ -951,6 +844,7 @@ const UserPN = ({
             {/* End Modal For Delete Form */}
 
             {/* Start Modal For Edit/Add Form */}
+
             <div className="modal fade" id="addEditModal">
               <div className="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered">
                 <div className="modal-content">

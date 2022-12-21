@@ -13,11 +13,9 @@ export const validateMinMax = (inputtxt, minlength, maxlength) => {
   else return true;
 };
 
-export const validateEmptyForm = (...myArray) => {
-  const myFieldsOBJ = Object.values(myArray[0]);
-
-  for (let i = 0; i < myFieldsOBJ.length; i++) {
-    if (myFieldsOBJ[i] === "") return true;
+export const validateEmptyForm = (objData, objKeys) => {
+  for (let i = 0; i < objKeys.length; i++) {
+    if (!objData[objKeys[i]]) return true;
   }
 
   return false;
