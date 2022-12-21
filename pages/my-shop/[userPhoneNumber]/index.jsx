@@ -17,13 +17,14 @@ import {
   findProductsByUserPN,
 } from "../../../helpers/db-util";
 import { getSession } from "next-auth/react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 const ACTIONS = {
   SET_FRAME1: "SET_FRAME1",
   SET_FRAME2: "SET_FRAME2",
   SET_FRAME3: "SET_FRAME3",
   SET_PRODUCTS: "SET_PRODUCTS",
-  SET_BTN_CLICKED: "SET_BTN_CLICKED",
   SET_PRODUCT_ID: "SET_PRODUCT_ID",
   SET_PROFILE_INFO: "SET_PROFILE_INFO",
   SET_PROFILE_VIEW: "SET_PROFILE_VIEW",
@@ -43,8 +44,6 @@ const reducer = (state, action) => {
       return { ...state, frame3: action.photo };
     case ACTIONS.SET_PRODUCTS:
       return { ...state, getProducts: action.products };
-    case ACTIONS.SET_BTN_CLICKED:
-      return { ...state, btnClicked: action.clicked };
     case ACTIONS.SET_PRODUCT_ID:
       return { ...state, getProductId: action.productId };
     case ACTIONS.SET_PROFILE_INFO:
@@ -73,11 +72,9 @@ const UserPN = ({
 }) => {
   const router = useRouter();
   const { userPhoneNumber } = router.query;
-
   const [state, dispatch] = useReducer(reducer, {
     getProducts: products,
     getUserStatus: userStatus,
-    btnClicked: false,
     getProductId: 0,
     getProfileInfo: userData,
     checkUserPhoneNumberInDb,
@@ -89,6 +86,25 @@ const UserPN = ({
     newPassword: "",
     oldPasswordEye: true,
     newPasswordEye: true,
+  });
+
+  const EditProfileSchema = Yup.object().shape({
+    name: Yup.string().required("نام و نام خانوادگی ضروری است"),
+
+    instagram: Yup.string().required("اینستاگرام ضروری است"),
+
+    companyName: Yup.string().required("نام شرکت ضروری است"),
+  });
+
+  const UpdatePasswordSchema = Yup.object().shape({
+    old_password: Yup.string()
+      .required("رمز عبور قبلی ضروری است")
+      .min(8, "رمز قبلی باید حداقل 8 کاراکتر باشد")
+      .max(16, "رمز قبلی باید حداکثر 16 کاراکتر باشد"),
+    new_password: Yup.string()
+      .required("رمز عبور جدید ضروری است")
+      .min(8, "رمز عبور جدید باید حداقل 8 کاراکتر باشد")
+      .max(16, "رمز عبور جدید باید حداکثر 16 کاراکتر باشد"),
   });
 
   const setNewPasswordEye = () => {
@@ -191,12 +207,6 @@ const UserPN = ({
     });
   };
 
-  const setBtnClicked = (clicked) => {
-    dispatch({
-      type: ACTIONS.SET_BTN_CLICKED,
-      clicked,
-    });
-  };
   const setProductId = (productId) => {
     dispatch({
       type: ACTIONS.SET_PRODUCT_ID,
@@ -388,7 +398,7 @@ const UserPN = ({
                   >
                     <div className="row  mb-3">
                       <div className="col-md-6">
-                        <div class="d-grid">
+                        <div className="d-grid">
                           <button
                             style={{
                               backgroundColor:
@@ -396,15 +406,16 @@ const UserPN = ({
                                 "#67b129",
                             }}
                             type="button"
-                            class="btn btn-success btn-block "
+                            className="btn btn-success btn-block "
                             onClick={() => setProfileView("edit-profile")}
                           >
-                            <i class="bi bi-card-checklist"></i> ویرایش اطلاعات
+                            <i className="bi bi-card-checklist"></i> ویرایش
+                            اطلاعات
                           </button>
                         </div>
                       </div>
                       <div className="col-md-6">
-                        <div class="d-grid">
+                        <div className="d-grid">
                           <button
                             style={{
                               backgroundColor:
@@ -412,156 +423,299 @@ const UserPN = ({
                                 "#d8d844",
                             }}
                             type="button"
-                            class="btn btn-warning btn-block"
+                            className="btn btn-warning btn-block"
                             onClick={() => setProfileView("change-password")}
                           >
-                            <i class="bi bi-card-checklist"></i> تغییر رمز عبور
+                            <i className="bi bi-card-checklist"></i> تغییر رمز
+                            عبور
                           </button>
                         </div>
                       </div>
                     </div>
                     {state.profileView === "edit-profile" ? (
-                      <form onSubmit={updateProfileInfo}>
-                        <div className="row">
-                          <div className="col-md-6">
-                            <div className="input-group mb-3 input-group-lg">
-                              <span
-                                className="input-group-text"
-                                style={{
-                                  borderRadius: "0 25px 25px 0",
-                                }}
-                              >
-                                <i className="bi bi-person-fill"></i>
-                              </span>
-                              <input
-                                placeholder="نام و نام خانوادگی"
-                                style={{
-                                  borderRadius: "25px 0 0 25px",
-                                }}
-                                type="text"
-                                className="form-control"
-                                onChange={handleProfileInfo}
-                                name="name"
-                                value={state.getProfileInfo.name}
-                              />
+                      <Formik
+                        initialValues={{
+                          name: "",
+                          instagram: "",
+                          company: "",
+                        }}
+                        validationSchema={EditProfileSchema}
+                        onSubmit={updateProfileInfo}
+                      >
+                        {({ touched, errors, isSubmitting, values }) => (
+                          <Form>
+                            <div className="row">
+                              <div className="col-md-6">
+                                <div className="input-group mb-3 input-group-lg">
+                                  <span
+                                    className="input-group-text"
+                                    style={{
+                                      borderRadius: "0 25px 25px 0",
+                                    }}
+                                  >
+                                    <i className="bi bi-person-fill"></i>
+                                  </span>
+                                  <Field
+                                    type="text"
+                                    name="name"
+                                    placeholder="نام و نام خانوادگی"
+                                    style={{
+                                      borderRadius: "25px 0 0 25px",
+                                    }}
+                                    value={state.getProfileInfo.name}
+                                    onChange={handleProfileInfo}
+                                    autocomplete="off"
+                                    className={`form-control
+                          ${touched.name && errors.name ? "is-invalid" : ""}`}
+                                  />
+
+                                  <ErrorMessage
+                                    component="div"
+                                    name="name"
+                                    className="invalid-feedback"
+                                  />
+                                </div>
+                                <div className="input-group mb-3 input-group-lg">
+                                  <span
+                                    className="input-group-text"
+                                    style={{
+                                      borderRadius: "0 25px 25px 0",
+                                    }}
+                                  >
+                                    <i className="bi bi-instagram"></i>
+                                  </span>
+                                  <Field
+                                    type="text"
+                                    name="instagram"
+                                    placeholder="آیدی اینستاگرام شما"
+                                    value={state.getProfileInfo.instagram}
+                                    onChange={handleProfileInfo}
+                                    style={{
+                                      borderRadius: "25px 0 0 25px",
+                                    }}
+                                    autocomplete="off"
+                                    className={`form-control
+                          ${
+                            touched.instagram && errors.instagram
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                                  />
+
+                                  <ErrorMessage
+                                    component="div"
+                                    name="instagram"
+                                    className="invalid-feedback"
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-md-6">
+                                <div className="input-group mb-3 input-group-lg">
+                                  <span
+                                    className="input-group-text"
+                                    style={{
+                                      borderRadius: "0 25px 25px 0",
+                                    }}
+                                  >
+                                    <i className="bi bi-building"></i>
+                                  </span>
+                                  <Field
+                                    type="text"
+                                    name="companyName"
+                                    placeholder="نام شرکت شما"
+                                    style={{
+                                      borderRadius: "25px 0 0 25px",
+                                    }}
+                                    value={state.getProfileInfo.companyName}
+                                    onChange={handleProfileInfo}
+                                    autocomplete="off"
+                                    className={`form-control
+                          ${
+                            touched.companyName && errors.companyName
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                                  />
+
+                                  <ErrorMessage
+                                    component="div"
+                                    name="companyName"
+                                    className="invalid-feedback"
+                                  />
+                                </div>
+                                <div className="d-grid">
+                                  <button
+                                    type="submit"
+                                    className="btn btn-edit-profile btn-block btn-lg"
+                                  >
+                                    <i className="bi bi-pencil-square"></i>{" "}
+                                    ویرایش
+                                  </button>
+                                </div>
+                              </div>
                             </div>
-                            <div className="input-group mb-3 input-group-lg">
-                              <span
-                                className="input-group-text"
-                                style={{
-                                  borderRadius: "0 25px 25px 0",
-                                }}
-                              >
-                                <i className="bi bi-instagram"></i>
-                              </span>
-                              <input
-                                placeholder="آیدی اینستاگرام شما"
-                                style={{
-                                  borderRadius: "25px 0 0 25px",
-                                }}
-                                type="text"
-                                className="form-control"
-                                onChange={handleProfileInfo}
-                                name="instagram"
-                                value={state.getProfileInfo.instagram}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-6">
-                            <div className="input-group mb-3 input-group-lg">
-                              <span
-                                className="input-group-text"
-                                style={{
-                                  borderRadius: "0 25px 25px 0",
-                                }}
-                              >
-                                <i className="bi bi-building"></i>
-                              </span>
-                              <input
-                                placeholder="نام شرکت شما"
-                                style={{
-                                  borderRadius: "25px 0 0 25px",
-                                }}
-                                type="text"
-                                className="form-control"
-                                onChange={handleProfileInfo}
-                                name="companyName"
-                                value={state.getProfileInfo.companyName}
-                              />
-                            </div>
-                            <div className="d-grid">
-                              <button
-                                type="submit"
-                                className="btn btn-edit-profile btn-block btn-lg"
-                              >
-                                <i className="bi bi-pencil-square"></i> ویرایش
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
+                          </Form>
+                        )}
+                      </Formik>
                     ) : (
-                      <form onSubmit={changePasswordHandler}>
-                        <div className="row">
-                          <div className="col-md-6">
-                            <div className="input-group mb-3 input-group-lg">
-                              <PasswordInput
-                                passwordHandler={setOldPasswordEye}
-                                passwordEye={state.oldPasswordEye}
-                              >
-                                <input
-                                  placeholder="رمز عبور فعلی"
-                                  style={{
-                                    borderRadius: 0,
-                                  }}
-                                  type={
-                                    state.oldPasswordEye ? "password" : "text"
-                                  }
-                                  className="form-control"
-                                  onChange={setOldPassword}
-                                  name="old-password"
-                                  value={state.oldPassword}
-                                />
-                              </PasswordInput>
-                            </div>
-                            <div className="input-group mb-3 input-group-lg">
-                              <PasswordInput
-                                passwordHandler={setNewPasswordEye}
-                                passwordEye={state.newPasswordEye}
-                              >
-                                <input
-                                  placeholder="رمز عبور جدید"
-                                  style={{
-                                    borderRadius: 0,
-                                  }}
-                                  type={
-                                    state.newPasswordEye ? "password" : "text"
-                                  }
-                                  className="form-control"
-                                  onChange={setNewPassword}
-                                  name="new-password"
-                                  value={state.newPassword}
-                                />
-                              </PasswordInput>
-                            </div>
-                            <div className="d-grid">
-                              <button
-                                type="submit"
-                                className="btn btn-edit-profile btn-block btn-lg"
-                              >
-                                <i class="bi bi-gear-wide-connected"></i> تغییر
-                                رمز عبور
-                              </button>
+                      <>
+                        <Formik
+                          initialValues={{
+                            name: "",
+                            email: "",
+                            subject: "",
+                            message: "",
+                          }}
+                          validationSchema={UpdatePasswordSchema}
+                          onSubmit={changePasswordHandler}
+                        >
+                          {({ touched, errors, isSubmitting, values }) => (
+                            <Form className="php-email-form">
+                              <div className="row">
+                                <div className="col-md-6">
+                                  <div className="input-group mb-3 input-group-lg">
+                                    <PasswordInput
+                                      passwordHandler={setOldPasswordEye}
+                                      passwordEye={state.oldPasswordEye}
+                                      errorMsg={
+                                        <ErrorMessage
+                                          component="div"
+                                          name="old_password"
+                                          className="invalid-feedback"
+                                        />
+                                      }
+                                    >
+                                      <Field
+                                        type={
+                                          state.oldPasswordEye
+                                            ? "password"
+                                            : "text"
+                                        }
+                                        name="old_password"
+                                        placeholder="رمز عبور فعلی"
+                                        style={{
+                                          borderRadius: 0,
+                                        }}
+                                        autocomplete="off"
+                                        className={`form-control
+                          ${
+                            touched.old_password && errors.old_password
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                                      />
+                                    </PasswordInput>
+                                  </div>
+                                  <div className="input-group mb-3 input-group-lg">
+                                    <PasswordInput
+                                      passwordHandler={setNewPasswordEye}
+                                      passwordEye={state.newPasswordEye}
+                                      errorMsg={
+                                        <ErrorMessage
+                                          component="div"
+                                          name="new_password"
+                                          className="invalid-feedback"
+                                        />
+                                      }
+                                    >
+                                      <Field
+                                        type={
+                                          state.oldPasswordEye
+                                            ? "password"
+                                            : "text"
+                                        }
+                                        name="new_password"
+                                        placeholder="رمز عبور جدید"
+                                        style={{
+                                          borderRadius: 0,
+                                        }}
+                                        autocomplete="off"
+                                        className={`form-control
+                          ${
+                            touched.new_password && errors.new_password
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                                      />
+                                    </PasswordInput>
+                                  </div>
+                                  <div className="d-grid">
+                                    <button
+                                      type="submit"
+                                      className="btn btn-edit-profile btn-block btn-lg"
+                                    >
+                                      <i className="bi bi-gear-wide-connected"></i>{" "}
+                                      تغییر رمز عبور
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </Form>
+                          )}
+                        </Formik>
+                        {/* 
+                        <form onSubmit={changePasswordHandler}>
+                          <div className="row">
+                            <div className="col-md-6">
+                              <div className="input-group mb-3 input-group-lg">
+                                <PasswordInput
+                                  passwordHandler={setOldPasswordEye}
+                                  passwordEye={state.oldPasswordEye}
+                                >
+                                  <input
+                                    placeholder="رمز عبور فعلی"
+                                    style={{
+                                      borderRadius: 0,
+                                    }}
+                                    type={
+                                      state.oldPasswordEye ? "password" : "text"
+                                    }
+                                    className="form-control"
+                                    onChange={setOldPassword}
+                                    name="old-password"
+                                    value={state.oldPassword}
+                                  />
+                                </PasswordInput>
+                              </div>
+                              <div className="input-group mb-3 input-group-lg">
+                                <PasswordInput
+                                  passwordHandler={setNewPasswordEye}
+                                  passwordEye={state.newPasswordEye}
+                                >
+                                  <input
+                                    placeholder="رمز عبور جدید"
+                                    style={{
+                                      borderRadius: 0,
+                                    }}
+                                    type={
+                                      state.newPasswordEye ? "password" : "text"
+                                    }
+                                    className="form-control"
+                                    onChange={setNewPassword}
+                                    name="new-password"
+                                    value={state.newPassword}
+                                  />
+                                </PasswordInput>
+                              </div>
+                              <div className="d-grid">
+                                <button
+                                  type="submit"
+                                  className="btn btn-edit-profile btn-block btn-lg"
+                                >
+                                  <i className="bi bi-gear-wide-connected"></i>{" "}
+                                  تغییر رمز عبور
+                                </button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </form>
+                        </form> */}
+                      </>
                     )}
                   </div>
                   <div className="tab-pane container active" id="discounts">
                     {state.getUserStatus === 1 && (
                       <div
-                        class="alert alert-warning text-center"
+                        className="alert alert-warning text-center"
                         style={{ fontWeight: "bold" }}
                       >
                         <div className="row">
@@ -581,7 +735,7 @@ const UserPN = ({
                     )}
                     {state.getUserStatus === 2 && (
                       <div
-                        class="alert alert-danger text-center"
+                        className="alert alert-danger text-center"
                         style={{ fontWeight: "bold" }}
                       >
                         <div className="row">
@@ -598,9 +752,11 @@ const UserPN = ({
                         دوباره تلاش برای ساخت فروشگاه نمایید و مشکلات ذکر شده در
                         لیست پایین را رفع نمایید تا فرشگاه شما مورد تایید قرار
                         گیرد
-                        <ul class="list-group mt-3 p-0">
-                          <li class="list-group-item">نام شرکت مناسب نیست</li>
-                          <li class="list-group-item">
+                        <ul className="list-group mt-3 p-0">
+                          <li className="list-group-item">
+                            نام شرکت مناسب نیست
+                          </li>
+                          <li className="list-group-item">
                             تصویر شرکت مناسب نیست از تصویر بهتری استفاده کنید
                           </li>
                         </ul>
@@ -633,7 +789,7 @@ const UserPN = ({
                                       شماره
                                     </th>
                                     <th>
-                                      <i class="bi bi-camera2"></i> تصویر
+                                      <i className="bi bi-camera2"></i> تصویر
                                     </th>
                                     <th>
                                       <i className="bi bi-activity"></i> نام
@@ -646,7 +802,8 @@ const UserPN = ({
                                       بررسی توسط کارشناسان
                                     </th>
                                     <th>
-                                      <i class="bi bi-trash-fill"></i> حذف محصول
+                                      <i className="bi bi-trash-fill"></i> حذف
+                                      محصول
                                     </th>
                                     <th>
                                       <i className="bi bi-pencil-fill"></i>{" "}
@@ -716,7 +873,7 @@ const UserPN = ({
                                         <td>
                                           <button
                                             type="button"
-                                            class="btn btn-delete"
+                                            className="btn btn-delete"
                                             data-bs-toggle="modal"
                                             data-bs-target="#deleteModal"
                                             onClick={() =>
@@ -820,31 +977,11 @@ const UserPN = ({
                       setFrame2={setFrame2}
                       setFrame3={setFrame3}
                       addOrEdit="add"
-                      btnClicked={state.btnClicked}
-                      setBtnClicked={setBtnClicked}
                       userPhoneNumber={userPhoneNumber}
                       product={state.getProducts}
                       changeProduct={setProducts}
+                      removePreview={removePreview}
                     />
-                  </div>
-                  {/* Modal footer */}
-                  <div className="modal-footer justify-content-center">
-                    <button
-                      type="button"
-                      className="btn btn-add-new-discount"
-                      data-bs-dismiss="modal"
-                      onClick={() => setBtnClicked(true)}
-                    >
-                      ثبت محصول
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-cancel"
-                      data-bs-dismiss="modal"
-                      onClick={removePreview}
-                    >
-                      انصراف
-                    </button>
                   </div>
                 </div>
               </div>

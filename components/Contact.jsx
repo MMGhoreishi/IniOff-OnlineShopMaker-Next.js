@@ -124,6 +124,8 @@ const Contact = () => {
                   type="text"
                   name="message"
                   as="textarea"
+                  rows="5"
+                  style={{ padding: 15 }}
                   autocomplete="off"
                   className={`form-control form-textarea
                           ${

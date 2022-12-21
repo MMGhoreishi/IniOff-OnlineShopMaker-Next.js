@@ -8,6 +8,7 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+
 @font-face {
   font-family: "Vazir FD-WOL";
   src: url("../fonts/Vazir-Medium-FD-WOL.eot");
@@ -74,16 +75,16 @@ h6,
   background-color: rgb(140, 189, 44);
 }
 
-.eyePassword{
+.eyePassword {
   cursor: pointer !important;
 }
 
-.invalid-feedback{
+.invalid-feedback {
   background-color: #f8d7da;
   text-align: center;
   color: #721c24;
   border-radius: 20px;
-  border:solid 1px #f5c6cb;
+  border: solid 1px #f5c6cb;
   padding: 10px;
 }
 

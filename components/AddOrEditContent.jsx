@@ -3,12 +3,15 @@ import { toast } from "react-toastify";
 
 const ACTIONS = {
   SET_PRODUCT: "SET_PRODUCT",
+  SET_ERR_PRODUCT: "SET_ERR_PRODUCT",
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case ACTIONS.SET_PRODUCT:
       return { ...state, getProduct: action.product };
+    case ACTIONS.SET_ERR_PRODUCT:
+      return { ...state, getErrProduct: action.getErrProduct };
     default:
       return state;
   }
@@ -23,14 +26,34 @@ const AddOrEditContent = ({
   setFrame3,
   showEditBtn,
   addOrEdit,
-  btnClicked,
-  setBtnClicked,
   userPhoneNumber,
   product,
   changeProduct,
+  removePreview,
 }) => {
   const [state, dispatch] = useReducer(reducer, {
-    getProduct: {},
+    getProduct: {
+      name: "",
+      numberOfDiscounts: "",
+      price: "",
+      discount: "",
+      description: "",
+      photo1: "",
+      photo2: "",
+      photo3: "",
+      category: "",
+    },
+    getErrProduct: {
+      name: false,
+      numberOfDiscounts: false,
+      price: false,
+      discount: false,
+      description: false,
+      photo1: false,
+      photo2: false,
+      photo3: false,
+      category: false,
+    },
   });
 
   useEffect(() => {
@@ -41,20 +64,28 @@ const AddOrEditContent = ({
     );
   }, [product]);
 
-  useEffect(() => {
-    if (btnClicked)
-      switch (addOrEdit) {
-        case "add":
-          addProduct();
-          break;
-
-        case "edit":
-          editProduct();
-          break;
-      }
-  }, [btnClicked]);
-
   const editProduct = async () => {
+    //Start-Validation
+    const frmInputKeys = {
+      name: false,
+      numberOfDiscounts: false,
+      price: false,
+      discount: false,
+      description: false,
+      photo1: false,
+      photo2: false,
+      photo3: false,
+      category: false,
+    };
+    const result = validateProductFrm(state.getProduct, frmInputKeys);
+    const myObjErr = {};
+    for (let i = 0; i < result.length; i++) {
+      myObjErr[result[i]] = true;
+    }
+    setErrProduct(myObjErr);
+    if (result.length > 0) return;
+    //End-Validation
+
     const previousProduct = product;
     try {
       changeProduct(state.getProduct);
@@ -66,9 +97,7 @@ const AddOrEditContent = ({
           "Content-Type": "application/json",
         },
       }).then((response) => {
-        if (response.status === 200) {
-          setBtnClicked(false);
-
+        if (response.status === 200)
           toast.success("محصول با موفقیت ویرایش شد", {
             position: "top-center",
             autoClose: 5000,
@@ -78,7 +107,7 @@ const AddOrEditContent = ({
             draggable: true,
             progress: undefined,
           });
-        } else {
+        else {
           changeProduct(previousProduct);
 
           toast.error("خطایی در ویرایش محصول پیش آمد", {
@@ -99,6 +128,27 @@ const AddOrEditContent = ({
   };
 
   const addProduct = async () => {
+    //Start-Validation
+    const frmInputKeys = {
+      name: false,
+      numberOfDiscounts: false,
+      price: false,
+      discount: false,
+      description: false,
+      photo1: false,
+      photo2: false,
+      photo3: false,
+      category: false,
+    };
+    const result = validateProductFrm(state.getProduct, frmInputKeys);
+    const myObjErr = {};
+    for (let i = 0; i < result.length; i++) {
+      myObjErr[result[i]] = true;
+    }
+    setErrProduct(myObjErr);
+    if (result.length > 0) return;
+    //End-Validation
+
     const allProducts = product ? [...product] : null;
     try {
       const discountsArray = [];
@@ -150,8 +200,6 @@ const AddOrEditContent = ({
             draggable: true,
             progress: undefined,
           });
-
-        setBtnClicked(false);
       });
     } catch (err) {
       if (product) changeProduct(allProducts);
@@ -163,6 +211,13 @@ const AddOrEditContent = ({
     dispatch({
       type: ACTIONS.SET_PRODUCT,
       product: product,
+    });
+  };
+
+  const setErrProduct = (getErrProduct) => {
+    dispatch({
+      type: ACTIONS.SET_ERR_PRODUCT,
+      getErrProduct: getErrProduct,
     });
   };
 
@@ -193,6 +248,21 @@ const AddOrEditContent = ({
     });
   };
 
+  const validateProductFrm = (objFields, objKeys) => {
+    const mixObj = { ...objKeys, ...objFields };
+
+    const myFieldsOBJ = Object.values(mixObj);
+    const myFieldsOBJ_KEY = Object.keys(mixObj);
+
+    const errFields = [];
+
+    for (let i = 0; i < myFieldsOBJ_KEY.length; i++) {
+      if (!myFieldsOBJ[i]) errFields.push(myFieldsOBJ_KEY[i]);
+    }
+
+    return errFields;
+  };
+
   return (
     <>
       <span className="badge required">الزامی</span>
@@ -205,9 +275,10 @@ const AddOrEditContent = ({
         >
           <i className="bi bi-basket2-fill"></i>
         </span>
+
         <input
           onChange={setProductInfo}
-          value={state.getProduct.name}
+          value={state.getProduct.name || ""}
           name="name"
           placeholder="نام محصول شما"
           style={{
@@ -217,6 +288,10 @@ const AddOrEditContent = ({
           className="form-control"
         />
       </div>
+
+      {state.getErrProduct !== null && state.getErrProduct.name && (
+        <div className="alert alert-danger">نام محصول الزامی است</div>
+      )}
       <span className="badge required">الزامی</span>
       <div className="input-group mb-3 input-group-lg">
         <span
@@ -228,7 +303,7 @@ const AddOrEditContent = ({
           <i className="bi bi-card-checklist"></i>
         </span>
         <select
-          value={state.getProduct.category}
+          value={state.getProduct.category || ""}
           style={{
             borderRadius: "25px 0 0 25px",
           }}
@@ -252,6 +327,9 @@ const AddOrEditContent = ({
           <option value="خدمات">خدمات</option>
         </select>
       </div>
+      {state.getErrProduct !== null && state.getErrProduct.category && (
+        <div className="alert alert-danger">انتخاب دسته محصول الزامی است</div>
+      )}
       {!showEditBtn && (
         <>
           <span className="badge required">الزامی</span>
@@ -275,6 +353,12 @@ const AddOrEditContent = ({
               onChange={setProductInfo}
             />
           </div>
+          {state.getErrProduct !== null &&
+            state.getErrProduct.numberOfDiscounts && (
+              <div className="alert alert-danger">
+                تعداد کدهای تخفیف الزامی است
+              </div>
+            )}
         </>
       )}
       <span className="h5">
@@ -299,11 +383,15 @@ const AddOrEditContent = ({
               }}
               type="number"
               className="form-control"
-              value={state.getProduct.price}
+              value={state.getProduct.price || ""}
               name="price"
               onChange={setProductInfo}
             />
           </div>
+
+          {state.getErrProduct !== null && state.getErrProduct.price && (
+            <div className="alert alert-danger">قیمت بدون تخفیف الزامی است</div>
+          )}
         </div>
         <div className="col-lg-6">
           <span className="badge required">الزامی</span>
@@ -323,11 +411,14 @@ const AddOrEditContent = ({
               }}
               type="number"
               className="form-control"
-              value={state.getProduct.discount}
+              value={state.getProduct.discount || ""}
               name="discount"
               onChange={setProductInfo}
             />
           </div>
+          {state.getErrProduct !== null && state.getErrProduct.discount && (
+            <div className="alert alert-danger">قیمت با تخفیف الزامی است</div>
+          )}
         </div>
       </div>
       <span className="h5">
@@ -356,10 +447,14 @@ const AddOrEditContent = ({
               onChange={setProductInfo}
             />
           </div>
+          {state.getErrProduct !== null && state.getErrProduct.photo1 && (
+            <div className="alert alert-danger">تصویر محصول الزامی است</div>
+          )}
           <img id="frame1" src={frame1} className="img-fluid mb-3" />
         </div>
         <div className="col-lg-4">
-          <span className="badge optional">اختیاری</span>
+          <span className="badge required">الزامی</span>
+          {/* <span className="badge optional">اختیاری</span> */}
           <div className="input-group mb-3 input-group-lg">
             <span
               className="input-group-text"
@@ -380,10 +475,14 @@ const AddOrEditContent = ({
               onChange={setProductInfo}
             />
           </div>
+          {state.getErrProduct !== null && state.getErrProduct.photo2 && (
+            <div className="alert alert-danger">تصویر محصول الزامی است</div>
+          )}
           <img id="frame2" src={frame2} className="img-fluid mb-3" />
         </div>
         <div className="col-lg-4">
-          <span className="badge optional">اختیاری</span>
+          <span className="badge required">الزامی</span>
+          {/* <span className="badge optional">اختیاری</span> */}
           <div className="input-group mb-3 input-group-lg">
             <span
               className="input-group-text"
@@ -404,28 +503,56 @@ const AddOrEditContent = ({
               onChange={setProductInfo}
             />
           </div>
+          {state.getErrProduct !== null && state.getErrProduct.photo3 && (
+            <div className="alert alert-danger">تصویر محصول الزامی است</div>
+          )}
           <img id="frame3" src={frame3} className="img-fluid mb-3" />
         </div>
       </div>
       <span className="badge required">الزامی</span>
       <textarea
-        className="form-control"
+        className="form-control mb-3"
         rows="5"
         placeholder="توضیحات محصول شما"
-        value={state.getProduct.description}
+        value={state.getProduct.description || ""}
         name="description"
         onChange={setProductInfo}
       />
-      {showEditBtn && (
+      {state.getErrProduct !== null && state.getErrProduct.description && (
+        <div className="alert alert-danger">توضیحات محصول الزامی است</div>
+      )}
+      {showEditBtn ? (
         <div class="d-grid mt-3">
           <button
-            type="button"
+            type="submit"
             class="btn btn-edit btn-block btn-lg"
-            onClick={() => setBtnClicked(true)}
+            onClick={editProduct}
           >
             <i class="bi bi-pencil-square"></i> ویرایش
           </button>
         </div>
+      ) : (
+        <>
+          {/* Modal footer */}
+          <div className="modal-footer justify-content-center">
+            <button
+              type="button"
+              className="btn btn-add-new-discount"
+              data-bs-dismiss="modal"
+              onClick={addProduct}
+            >
+              ثبت محصول
+            </button>
+            <button
+              type="button"
+              className="btn btn-cancel"
+              data-bs-dismiss="modal"
+              onClick={removePreview}
+            >
+              انصراف
+            </button>
+          </div>
+        </>
       )}
     </>
   );

@@ -36,8 +36,6 @@ const reducer = (state, action) => {
       return { ...state, frame2: action.photo };
     case ACTIONS.SET_FRAME3:
       return { ...state, frame3: action.photo };
-    case ACTIONS.SET_BTN_CLICKED:
-      return { ...state, btnClicked: action.clicked };
     default:
       return state;
   }
@@ -52,7 +50,6 @@ const ProductId = ({ product, userData, getShowPermission, statusNumber }) => {
     frame1: "/assets/img/preview.png",
     frame2: "/assets/img/preview.png",
     frame3: "/assets/img/preview.png",
-    btnClicked: false,
     getShowPermission,
   });
 
@@ -80,13 +77,6 @@ const ProductId = ({ product, userData, getShowPermission, statusNumber }) => {
       setProductDiscounts(allDiscounts);
       console.log(err.message);
     }
-  };
-
-  const setBtnClicked = (clicked) => {
-    dispatch({
-      type: ACTIONS.SET_BTN_CLICKED,
-      clicked: clicked,
-    });
   };
 
   const saveDiscount = (discount) => {
@@ -230,8 +220,6 @@ const ProductId = ({ product, userData, getShowPermission, statusNumber }) => {
                       <AddOrEditContent
                         showEditBtn={true}
                         addOrEdit="edit"
-                        btnClicked={state.btnClicked}
-                        setBtnClicked={setBtnClicked}
                         product={state.getProduct}
                         changeProduct={setProduct}
                         frame1={state.frame1}
