@@ -1,9 +1,12 @@
 import { useEffect, useReducer, useRef } from "react";
 import { toast } from "react-toastify";
+import SingleFileUploadForm from "./SingleUploadForm";
 
 const ACTIONS = {
   SET_PRODUCT: "SET_PRODUCT",
   SET_ERR_PRODUCT: "SET_ERR_PRODUCT",
+  SET_FILE: "SET_FILE",
+  SET_PREVIEW_URL: "SET_PREVIEW_URL",
 };
 
 const reducer = (state, action) => {
@@ -12,28 +15,27 @@ const reducer = (state, action) => {
       return { ...state, getProduct: action.product };
     case ACTIONS.SET_ERR_PRODUCT:
       return { ...state, getErrProduct: action.getErrProduct };
+    case ACTIONS.SET_FILE:
+      return { ...state, file: action.file };
+    case ACTIONS.SET_PREVIEW_URL:
+      return { ...state, previewUrl: action.previewUrl };
     default:
       return state;
   }
 };
 
 const AddOrEditContent = ({
-  frame1,
-  frame2,
-  frame3,
-  setFrame1,
-  setFrame2,
-  setFrame3,
   showEditBtn,
   addOrEdit,
   userPhoneNumber,
   product,
   changeProduct,
-  removePreview,
 }) => {
   const closeRef = useRef();
 
   const [state, dispatch] = useReducer(reducer, {
+    file: [],
+    previewUrl: [],
     getProduct: {
       name: "",
       numberOfDiscounts: "",
@@ -57,6 +59,80 @@ const AddOrEditContent = ({
       category: false,
     },
   });
+
+  const setFile = (file) => {
+    dispatch({
+      type: ACTIONS.SET_FILE,
+      file,
+    });
+  };
+
+  const setPreviewUrl = (previewUrl) => {
+    dispatch({
+      type: ACTIONS.SET_PREVIEW_URL,
+      previewUrl,
+    });
+  };
+
+  const setProductInfo = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    // if (name === "photo1" || name === "photo2" || name === "photo3") {
+    //   const fileInput = event.target;
+
+    //   if (!fileInput.files) {
+    //     alert("No file was chosen");
+    //     return;
+    //   }
+
+    //   if (!fileInput.files || fileInput.files.length === 0) {
+    //     alert("Files list is empty");
+    //     return;
+    //   }
+
+    //   const file = fileInput.files[0];
+
+    //   /** File validation */
+    //   if (!file.type.startsWith("image")) {
+    //     alert("Please select a valide image");
+    //     return;
+    //   }
+
+    //   /** Setting file state */
+    //   //setFile(file); // we will use the file state, to send it later to the server
+
+    //   const fileArray = state.file.concat(file);
+    //   setFile(fileArray);
+
+    //   const objUrl = URL.createObjectURL(file);
+    //   const previewArray = state.previewUrl.concat(objUrl);
+
+    //   setPreviewUrl(previewArray); // we will use this to show the preview of the image
+
+    //   /** Reset file input */
+    //   event.currentTarget.type = "text";
+    //   event.currentTarget.type = "file";
+
+    //   setProduct({
+    //     ...state.getProduct,
+    //     [name]: "p-image",
+    //   });
+
+    //   return;
+    // }
+
+    setProduct({
+      ...state.getProduct,
+      [name]: value,
+    });
+  };
+
+  useEffect(() => {
+    console.log("###CheckUpload>>>>");
+    console.log(state.file);
+    console.log(state.previewUrl);
+  }, [state.file, state.previewUrl]);
 
   useEffect(() => {
     setProduct(
@@ -129,7 +205,39 @@ const AddOrEditContent = ({
     }
   };
 
+  const onUploadFile = async () => {
+    if (!state.file) {
+      return;
+    }
+
+    try {
+      var formData = new FormData();
+      formData.append("media", state.file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const { data, error } = await res.json();
+
+      if (error || !data) {
+        alert(error || "Sorry! something went wrong.");
+        return;
+      }
+
+      console.log("File was uploaded successfylly:", data);
+    } catch (error) {
+      console.error(error);
+      alert("Sorry! something went wrong.");
+    }
+  };
+
   const addProduct = async () => {
+    console.log("product-newwww2>>>>");
+    console.log(product);
+    console.log(state.getProduct);
+
     //Start-Validation
     const frmInputKeys = [
       "name",
@@ -204,7 +312,10 @@ const AddOrEditContent = ({
             progress: undefined,
           });
 
-        if (response.status === 201) closeRef.current.click();
+        if (response.status === 201) {
+          closeRef.current.click();
+          //onUploadFile();
+        }
       });
     } catch (err) {
       if (product) changeProduct(allProducts);
@@ -223,33 +334,6 @@ const AddOrEditContent = ({
     dispatch({
       type: ACTIONS.SET_ERR_PRODUCT,
       getErrProduct: getErrProduct,
-    });
-  };
-
-  const setProductInfo = (event) => {
-    const name = event.target.name;
-    const value =
-      name === "photo1" || name === "photo2" || name === "photo3"
-        ? /*URL.createObjectURL(event.target.files[0])*/ "portfolio-3.jpg"
-        : event.target.value;
-
-    switch (name) {
-      case "photo1":
-        setFrame1(value);
-        break;
-
-      case "photo2":
-        setFrame2(value);
-        break;
-
-      case "photo3":
-        setFrame3(value);
-        break;
-    }
-
-    setProduct({
-      ...state.getProduct,
-      [name]: value,
     });
   };
 
@@ -424,9 +508,16 @@ const AddOrEditContent = ({
         <i className="bi bi-camera-fill"></i> تصاویر محصول شما:{" "}
       </span>
       <div className="row mt-3">
-        <div className="col-lg-4">
+        <div className="col-12 mb-3">
           <span className="badge required">الزامی</span>
-          <div className="input-group mb-3 input-group-lg">
+          <SingleFileUploadForm
+            name="photo1"
+            functionHandler={setProductInfo}
+            file={state.file[0]}
+            previewUrl={state.previewUrl[0]}
+          />
+
+          {/* <div className="input-group mb-3 input-group-lg">
             <span
               className="input-group-text"
               style={{
@@ -445,67 +536,35 @@ const AddOrEditContent = ({
               name="photo1"
               onChange={setProductInfo}
             />
-          </div>
+          </div> */}
           {state.getErrProduct !== null && state.getErrProduct.photo1 && (
             <div className="alert alert-danger">تصویر محصول الزامی است</div>
           )}
-          <img id="frame1" src={frame1} className="img-fluid mb-3" />
+          {/* <img id="frame1" src={frame1} className="img-fluid mb-3" /> */}
         </div>
-        <div className="col-lg-4">
+        <div className="col-12 mb-3">
           <span className="badge required">الزامی</span>
-          {/* <span className="badge optional">اختیاری</span> */}
-          <div className="input-group mb-3 input-group-lg">
-            <span
-              className="input-group-text"
-              style={{
-                borderRadius: "0 25px 25px 0",
-              }}
-            >
-              <i className="bi bi-cloud-plus-fill"></i>
-            </span>
-            <input
-              className="form-control"
-              style={{
-                borderRadius: "25px 0 0 25px",
-              }}
-              type="file"
-              id="formFile"
-              name="photo2"
-              onChange={setProductInfo}
-            />
-          </div>
+          <SingleFileUploadForm
+            name="photo2"
+            functionHandler={setProductInfo}
+            file={state.file[1]}
+            previewUrl={state.previewUrl[1]}
+          />
           {state.getErrProduct !== null && state.getErrProduct.photo2 && (
             <div className="alert alert-danger">تصویر محصول الزامی است</div>
           )}
-          <img id="frame2" src={frame2} className="img-fluid mb-3" />
         </div>
-        <div className="col-lg-4">
+        <div className="col-12 mb-3">
           <span className="badge required">الزامی</span>
-          {/* <span className="badge optional">اختیاری</span> */}
-          <div className="input-group mb-3 input-group-lg">
-            <span
-              className="input-group-text"
-              style={{
-                borderRadius: "0 25px 25px 0",
-              }}
-            >
-              <i className="bi bi-cloud-plus-fill"></i>
-            </span>
-            <input
-              className="form-control"
-              style={{
-                borderRadius: "25px 0 0 25px",
-              }}
-              type="file"
-              id="formFile"
-              name="photo3"
-              onChange={setProductInfo}
-            />
-          </div>
+          <SingleFileUploadForm
+            name="photo3"
+            functionHandler={setProductInfo}
+            file={state.file[2]}
+            previewUrl={state.previewUrl[2]}
+          />
           {state.getErrProduct !== null && state.getErrProduct.photo3 && (
             <div className="alert alert-danger">تصویر محصول الزامی است</div>
           )}
-          <img id="frame3" src={frame3} className="img-fluid mb-3" />
         </div>
       </div>
       <span className="badge required">الزامی</span>
@@ -542,11 +601,11 @@ const AddOrEditContent = ({
             >
               ثبت محصول
             </button>
+            {/* onClick={removePreview} */}
             <button
               type="button"
               className="btn btn-cancel"
               data-bs-dismiss="modal"
-              onClick={removePreview}
               ref={closeRef}
             >
               انصراف

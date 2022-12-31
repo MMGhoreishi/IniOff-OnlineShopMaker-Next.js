@@ -15,9 +15,6 @@ const ACTIONS = {
   SAVE_DISCOUNT: "SAVE_DISCOUNT",
   SET_PRODUCT_DISCOUNTS: "SET_PRODUCT_DISCOUNTS",
   SET_PRODUCT: "SET_PRODUCT",
-  SET_FRAME1: "SET_FRAME1",
-  SET_FRAME2: "SET_FRAME2",
-  SET_FRAME3: "SET_FRAME3",
   SET_BTN_CLICKED: "SET_BTN_CLICKED",
   SET_CHECK_USER_PHONENUMBER_IN_DB: "SET_CHECK_USER_PHONENUMBER_IN_DB",
 };
@@ -30,12 +27,6 @@ const reducer = (state, action) => {
       return { ...state, getProductDiscounts: action.R_ProductDiscounts };
     case ACTIONS.SET_PRODUCT:
       return { ...state, getProduct: action.R_Product };
-    case ACTIONS.SET_FRAME1:
-      return { ...state, frame1: action.photo };
-    case ACTIONS.SET_FRAME2:
-      return { ...state, frame2: action.photo };
-    case ACTIONS.SET_FRAME3:
-      return { ...state, frame3: action.photo };
     default:
       return state;
   }
@@ -47,9 +38,6 @@ const ProductId = ({ product, userData, getShowPermission, statusNumber }) => {
     getProduct: product,
     getProductDiscounts: product ? product.numberOfDiscounts : "",
     getUserInformation: userData,
-    frame1: "/assets/img/preview.png",
-    frame2: "/assets/img/preview.png",
-    frame3: "/assets/img/preview.png",
     getShowPermission,
   });
 
@@ -94,27 +82,6 @@ const ProductId = ({ product, userData, getShowPermission, statusNumber }) => {
     dispatch({
       type: ACTIONS.SET_PRODUCT,
       R_Product: product,
-    });
-  };
-
-  const setFrame1 = (photo) => {
-    dispatch({
-      type: ACTIONS.SET_FRAME1,
-      photo: photo,
-    });
-  };
-
-  const setFrame2 = (photo) => {
-    dispatch({
-      type: ACTIONS.SET_FRAME2,
-      photo: photo,
-    });
-  };
-
-  const setFrame3 = (photo) => {
-    dispatch({
-      type: ACTIONS.SET_FRAME3,
-      photo: photo,
     });
   };
 
@@ -222,12 +189,6 @@ const ProductId = ({ product, userData, getShowPermission, statusNumber }) => {
                         addOrEdit="edit"
                         product={state.getProduct}
                         changeProduct={setProduct}
-                        frame1={state.frame1}
-                        frame2={state.frame2}
-                        frame3={state.frame3}
-                        setFrame1={setFrame1}
-                        setFrame2={setFrame2}
-                        setFrame3={setFrame3}
                       />
                     </div>
                     <div className="tab-pane container active" id="preview">

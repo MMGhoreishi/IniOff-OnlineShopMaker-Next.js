@@ -11,7 +11,10 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "classnames": "^2.3.2",
+    "date-fns": "^2.29.3",
+    "formidable": "^2.1.1",
     "formik": "^2.2.9",
+    "mime": "^3.0.0",
     "mongodb": "^4.12.1",
     "next": "12.3.0",
     "next-auth": "^4.17.0",
@@ -22,7 +25,10 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.13",
     "eslint": "8.23.1",
-    "eslint-config-next": "12.3.0"
+    "eslint-config-next": "12.3.0",
+    "postcss": "^8.4.20",
+    "tailwindcss": "^3.2.4"
   }
 }

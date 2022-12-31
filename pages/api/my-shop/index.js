@@ -20,6 +20,8 @@ const handler = async (req, res) => {
   try {
     client = await connectDatabase();
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({ message: "Connecting to the database failed!" });
     return;
   }
@@ -56,6 +58,8 @@ const handler = async (req, res) => {
         res.status(201).json({ message: "It added the product well!" });
       }
     } catch (error) {
+      console.log("########my-error");
+      console.log(error);
       client.close();
       res.status(500).json({ message: "Inserting the product failed!" });
     }
@@ -120,6 +124,12 @@ const handler = async (req, res) => {
   }
 
   client.close();
+};
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
 };
 
 export default handler;

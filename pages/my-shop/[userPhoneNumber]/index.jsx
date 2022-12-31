@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import classNames from "classnames";
 import { toast } from "react-toastify";
 import {
@@ -21,9 +21,6 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 const ACTIONS = {
-  SET_FRAME1: "SET_FRAME1",
-  SET_FRAME2: "SET_FRAME2",
-  SET_FRAME3: "SET_FRAME3",
   SET_PRODUCTS: "SET_PRODUCTS",
   SET_PRODUCT_ID: "SET_PRODUCT_ID",
   SET_PROFILE_INFO: "SET_PROFILE_INFO",
@@ -36,12 +33,6 @@ const ACTIONS = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case ACTIONS.SET_FRAME1:
-      return { ...state, frame1: action.photo };
-    case ACTIONS.SET_FRAME2:
-      return { ...state, frame2: action.photo };
-    case ACTIONS.SET_FRAME3:
-      return { ...state, frame3: action.photo };
     case ACTIONS.SET_PRODUCTS:
       return { ...state, getProducts: action.products };
     case ACTIONS.SET_PRODUCT_ID:
@@ -79,14 +70,18 @@ const UserPN = ({
     getProfileInfo: userData,
     checkUserPhoneNumberInDb,
     profileView: "edit-profile",
-    frame1: "/assets/img/preview.png",
-    frame2: "/assets/img/preview.png",
-    frame3: "/assets/img/preview.png",
+
     oldPassword: "",
     newPassword: "",
     oldPasswordEye: true,
     newPasswordEye: true,
   });
+
+  useEffect(() => {
+    console.log("state.getProducts>>>>");
+    console.log(state.getProducts);
+    console.log(products);
+  }, [state.getProducts]);
 
   const UpdatePasswordSchema = Yup.object().shape({
     old_password: Yup.string()
@@ -157,44 +152,37 @@ const UserPN = ({
   };
 
   const updateProfileInfo = async (event) => {
-    console.log("event>>>>>");
-    console.log(event);
-
-    console.log("updateProfileInfo_form//////");
-
-    return;
-
-    // fetch(`/api/my-shop`, {
-    //   method: "PUT",
-    //   body: JSON.stringify({ profileInfo: state.getProfileInfo }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // }).then((response) => {
-    //   if (response.status === 200)
-    //     toast.success(
-    //       "تبریک ویرایش موفقیت آمیز بود بنابراین حساب شما تحت بررسی کارشناسان می باشد",
-    //       {
-    //         position: "top-center",
-    //         autoClose: 5000,
-    //         hideProgressBar: false,
-    //         closeOnClick: true,
-    //         pauseOnHover: true,
-    //         draggable: true,
-    //         progress: undefined,
-    //       }
-    //     );
-    //   else
-    //     toast.error("خطایی رخ داد", {
-    //       position: "top-center",
-    //       autoClose: 5000,
-    //       hideProgressBar: false,
-    //       closeOnClick: true,
-    //       pauseOnHover: true,
-    //       draggable: true,
-    //       progress: undefined,
-    //     });
-    // });
+    fetch(`/api/my-shop`, {
+      method: "PUT",
+      body: JSON.stringify({ profileInfo: state.getProfileInfo }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => {
+      if (response.status === 200)
+        toast.success(
+          "تبریک ویرایش موفقیت آمیز بود بنابراین حساب شما تحت بررسی کارشناسان می باشد",
+          {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
+        );
+      else
+        toast.error("خطایی رخ داد", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+    });
   };
 
   const setProducts = (products) => {
@@ -218,27 +206,6 @@ const UserPN = ({
     });
   };
 
-  const setFrame1 = (photo) => {
-    dispatch({
-      type: ACTIONS.SET_FRAME1,
-      photo,
-    });
-  };
-
-  const setFrame2 = (photo) => {
-    dispatch({
-      type: ACTIONS.SET_FRAME2,
-      photo,
-    });
-  };
-
-  const setFrame3 = (photo) => {
-    dispatch({
-      type: ACTIONS.SET_FRAME3,
-      photo,
-    });
-  };
-
   const handleProfileInfo = (event) => {
     setProfileInfo({
       ...state.getProfileInfo,
@@ -248,12 +215,6 @@ const UserPN = ({
 
   const saveProductId = (productId) => {
     setProductId(productId);
-  };
-
-  const removePreview = () => {
-    setFrame1("/assets/img/preview.png");
-    setFrame2("/assets/img/preview.png");
-    setFrame3("/assets/img/preview.png");
   };
 
   const setOldPassword = (oldPassword) => {
@@ -854,27 +815,21 @@ const UserPN = ({
                       <i className="bi bi-file-earmark-plus"></i> اضافه کردن
                       محصول
                     </h4>
+                    {/* onClick={removePreview} */}
                     <button
                       type="button"
                       className="btn-close m-0"
                       data-bs-dismiss="modal"
-                      onClick={removePreview}
                     ></button>
                   </div>
                   {/* Modal body */}
                   <div className="modal-body text-center">
+                    {/* removePreview={removePreview} */}
                     <AddOrEditContent
-                      frame1={state.frame1}
-                      frame2={state.frame2}
-                      frame3={state.frame3}
-                      setFrame1={setFrame1}
-                      setFrame2={setFrame2}
-                      setFrame3={setFrame3}
                       addOrEdit="add"
                       userPhoneNumber={userPhoneNumber}
                       product={state.getProducts}
                       changeProduct={setProducts}
-                      removePreview={removePreview}
                     />
                   </div>
                 </div>

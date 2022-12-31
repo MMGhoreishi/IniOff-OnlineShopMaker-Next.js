@@ -148,7 +148,7 @@ const Layout = ({ children }) => {
 
           <nav id="navbar" className="navbar float-start">
             <ul>
-              {useRouter().pathname == "/" ? (
+              {router.pathname == "/" ? (
                 <>
                   <li>
                     <LinkReactScroll to="hero" text={"خانه"} />
