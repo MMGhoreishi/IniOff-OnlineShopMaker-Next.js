@@ -35,7 +35,7 @@ const SignIn = () => {
           <div className="container">
             <div className="row">
               <div className="col text-center text-white h2 fw-light mb-5 title-form">
-                <i className="bi bi-door-open"></i> ورود به عنوان ادمین
+                <i className="bi bi-door-open"></i> ورود به پنل ادمین
               </div>
             </div>
             <div className="row justify-content-center">
