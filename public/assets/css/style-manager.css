@@ -45,13 +45,16 @@
   font-display: swap;
 }
 
-body {
-  font-family: "Vazir-Light";
+.modal {
+  font-family: "Vazir FD-WOL" !important;
 }
 
-.title-form {
-  font-family: "Vazir-Thin" !important;
-  text-shadow: 2px 2px 2px black;
+.nav-link {
+  font-family: "Vazir-Light" !important;
+}
+
+body {
+  background-image: linear-gradient(to left, #6c757d, #bfc1c2);
 }
 
 /*--------------------------------------------------------------
@@ -63,10 +66,16 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
+  font-family: "Vazir-Light" !important;
 }
 #sign-in .dark-cover {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.281);
+}
+
+#sign-in .title-form {
+  font-family: "Vazir-Thin" !important;
+  text-shadow: 2px 2px 2px black;
 }
 #sign-in input {
   background-color: rgba(0, 0, 0, 0.123);
@@ -82,6 +91,19 @@ body {
 /*--------------------------------------------------------------
 # control-panel section
 --------------------------------------------------------------*/
+#control-panel {
+  font-family: "Vazir FD-WOL" !important;
+}
 #control-panel .nav-pills .nav-link {
   border-radius: 50px;
+}
+
+#control-panel .title-form {
+  font-family: "Vazir-Light" !important;
+  text-shadow: 2px 2px 2px black;
+}
+
+#control-panel .manage-row {
+  background-color: white;
+  border-top: solid 3px #ffc107;
 }

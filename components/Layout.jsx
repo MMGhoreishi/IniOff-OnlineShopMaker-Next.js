@@ -242,6 +242,7 @@ const Layout = ({ children }) => {
           </div>
         </div>
       </footer>
+
       <BackToTopBtn />
 
       {/* Vendor JS Files */}

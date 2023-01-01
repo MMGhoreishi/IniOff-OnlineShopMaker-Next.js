@@ -1,6 +1,6 @@
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
-import { Layout } from "../components";
+import { AdminLayout, Layout } from "../components";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
@@ -62,7 +62,9 @@ const MyApp = ({ Component, pageProps }) => {
           <Component {...pageProps} />
         </Layout>
       ) : (
-        <Component {...pageProps} />
+        <AdminLayout>
+          <Component {...pageProps} />
+        </AdminLayout>
       )}
     </SessionProvider>
   );

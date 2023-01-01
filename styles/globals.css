@@ -5,3 +5,15 @@
 .btn-danger {
   background-color: #dc3545;
 }
+
+.btn-info {
+  background-color: #0dcaf0;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+}
+
+.btn-success {
+  background-color: #198754;
+}
