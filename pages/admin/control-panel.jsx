@@ -7,9 +7,17 @@ const controlPanel = () => {
 
       <section id="control-panel">
         <div class="container">
-          <div class="row">
-            <div class="col text-center text-white h2 fw-light title-form py-5">
+          <div class="row  py-5">
+            <div class="col-12 text-center text-white h2 fw-light title-form">
               <i class="bi bi-gear-wide-connected"></i> کنترل پنل
+            </div>
+            <div className="col-12 text-center">
+              <button
+                type="button"
+                class="btn btn-success rounded-pill border border-warning px-3"
+              >
+                <i class="bi bi-cursor"></i> بازدید از سایت
+              </button>
             </div>
           </div>
           <div class="row manage-row">
