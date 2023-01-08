@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import classNames from "classnames";
 import { toast } from "react-toastify";
 import {
@@ -77,24 +77,17 @@ const UserPN = ({
     newPasswordEye: true,
   });
 
+  useEffect(() => {
+    console.log("state.getProducts-useEffect>>>>>");
+    console.log(state.getProducts);
+  }, [state.getProducts]);
+
   const setProducts = (products) => {
     dispatch({
       type: ACTIONS.SET_PRODUCTS,
       products,
     });
   };
-
-  // useEffect(() => {
-  //   const myObj = [...products];
-
-  //   for (let i = 0; i < myObj.length; i++) {
-  //     myObj[i]["photo1"]["url"] = myObj[i]["photo1"]["url"].replace("\\", "/");
-  //     myObj[i]["photo2"]["url"] = myObj[i]["photo2"]["url"].replace("\\", "/");
-  //     myObj[i]["photo3"]["url"] = myObj[i]["photo3"]["url"].replace("\\", "/");
-  //   }
-
-  //   setProducts(myObj);
-  // }, []);
 
   const UpdatePasswordSchema = Yup.object().shape({
     old_password: Yup.string()

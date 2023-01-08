@@ -272,7 +272,7 @@ const AddOrEditContent = ({
       return false;
     }
 
-    return true;
+    return myFilesUrls[0];
   };
 
   const addProduct = async () => {
@@ -368,6 +368,13 @@ const AddOrEditContent = ({
           closeRef.current.click();
           const uploadResult = await onUploadFile();
           if (uploadResult) {
+            objValue.photo1 = uploadResult;
+            const resultObj = [...product];
+            resultObj.push(objValue);
+            console.log("The-old-product_array123>>>>>");
+            console.log(resultObj);
+            changeProduct(resultObj);
+
             toast.success("محصول با موفقیت اضافه شد", {
               position: "top-center",
               autoClose: 5000,
