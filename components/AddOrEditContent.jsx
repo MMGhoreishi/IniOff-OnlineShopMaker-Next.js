@@ -401,7 +401,7 @@ const AddOrEditContent = ({
   const delMethod = async () => {
     await fetch("/api/my-shop/deleteProductPhotos", {
       method: "DELETE",
-      body: JSON.stringify({ myPhotosArray: state.delArray[0] }),
+      body: JSON.stringify({ myPhotosArray: state.delArray }),
       headers: {
         "Content-Type": "application/json",
       },

@@ -1,3 +1,4 @@
+import fs from "fs";
 import { getSession } from "next-auth/react";
 import { join } from "path";
 
@@ -21,18 +22,21 @@ const handler = async (req, res) => {
   try {
     const { myPhotosArray } = req.body;
 
-    const splitUrl = myPhotosArray.url;
-    const myArray = splitUrl.split("/");
+    for (let i = 0; i < myPhotosArray.length; i++) {
+      const uploadDir = join(
+        process.env.ROOT_DIR || process.cwd(),
+        `/public/uploads/${myPhotosArray[i].url}`
+      );
 
-    const uploadDirFolder = join(
-      process.env.ROOT_DIR || process.cwd(),
-      `/public/uploads/${myArray[0]}`
-    );
-
-    const rimraf = require("rimraf");
-    rimraf(uploadDirFolder, () => {
-      console.log("$$$$$$done");
-    });
+      fs.unlink(uploadDir, (err) => {
+        if (err) {
+          console.log("#######error1>>>>");
+          console.log(err);
+          res.status(500).json({ message: err });
+          return;
+        }
+      });
+    }
 
     res.status(200).json({
       message: "Delete File successfully.",
