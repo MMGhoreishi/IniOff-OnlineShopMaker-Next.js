@@ -14,6 +14,8 @@ const ACTIONS = {
 
   SET_FILE3: "SET_FILE3",
   SET_PREVIEW_URL3: "SET_PREVIEW_URL3",
+
+  SET_DEL_ARRAY: "SET_DEL_ARRAY",
 };
 
 const reducer = (state, action) => {
@@ -37,6 +39,8 @@ const reducer = (state, action) => {
       return { ...state, file3: action.file };
     case ACTIONS.SET_PREVIEW_URL3:
       return { ...state, previewUrl3: action.previewUrl };
+    case ACTIONS.SET_DEL_ARRAY:
+      return { ...state, delArray: action.delArray };
     default:
       return state;
   }
@@ -58,6 +62,7 @@ const AddOrEditContent = ({
     previewUrl2: null,
     file3: null,
     previewUrl3: null,
+    delArray: [],
     getProduct: {
       name: "",
       numberOfDiscounts: "",
@@ -81,6 +86,13 @@ const AddOrEditContent = ({
       category: false,
     },
   });
+
+  const setDelArray = (delArray) => {
+    dispatch({
+      type: ACTIONS.SET_DEL_ARRAY,
+      delArray,
+    });
+  };
 
   const setFile1 = (file) => {
     dispatch({
@@ -241,38 +253,7 @@ const AddOrEditContent = ({
       }
     }
 
-    try {
-      if (myFilesUrls.length === 3) {
-        fetch("/api/my-shop/addPhotosToProduct", {
-          method: "PUT",
-          body: JSON.stringify({
-            productName: state.getProduct.name,
-            photosArray: myFilesUrls,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }).then((response) => {
-          if (response.status !== 200)
-            toast.error("خطایی رخ داد", {
-              position: "top-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          else console.log("Product-photos updated successfylly!");
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Sorry! something went wrong.");
-      return false;
-    }
-
-    return myFilesUrls[0];
+    return myFilesUrls;
   };
 
   const addProduct = async () => {
@@ -319,12 +300,21 @@ const AddOrEditContent = ({
         discountsArray.push(discount);
       }
 
+      const uploadPhotos = await onUploadFile();
+
+      console.log("uploadPhotos-photos-await>>>>>");
+      console.log(uploadPhotos);
+
+      setDelArray(uploadPhotos);
+
       const objValue = {
         ...myObj,
-        ...state.getProduct,
         ...{
           numberOfDiscounts: discountsArray,
           userPhoneNumber: userPhoneNumber,
+          photo1: uploadPhotos[0],
+          photo2: uploadPhotos[1],
+          photo3: uploadPhotos[2],
           RevieWbyExperts: "under investigation",
           condition: true,
         },
@@ -353,7 +343,7 @@ const AddOrEditContent = ({
 
         if (response.status !== 201 && product) changeProduct(allProducts);
 
-        if (response.status !== 201 && response.status !== 422)
+        if (response.status !== 201 && response.status !== 422) {
           toast.error("خطایی رخ داد", {
             position: "top-center",
             autoClose: 5000,
@@ -363,29 +353,21 @@ const AddOrEditContent = ({
             draggable: true,
             progress: undefined,
           });
+        }
 
         if (response.status === 201) {
           closeRef.current.click();
-          const uploadResult = await onUploadFile();
-          if (uploadResult) {
-            objValue.photo1 = uploadResult;
-            const resultObj = [...product];
-            resultObj.push(objValue);
-            console.log("The-old-product_array123>>>>>");
-            console.log(resultObj);
-            changeProduct(resultObj);
 
-            toast.success("محصول با موفقیت اضافه شد", {
-              position: "top-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          }
-        }
+          toast.success("محصول با موفقیت اضافه شد", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } else await delMethod();
       });
     } catch (err) {
       if (product) changeProduct(allProducts);
@@ -414,6 +396,37 @@ const AddOrEditContent = ({
     }
 
     return errFields;
+  };
+
+  const delMethod = async () => {
+    await fetch("/api/my-shop/deleteProductPhotos", {
+      method: "DELETE",
+      body: JSON.stringify({ myPhotosArray: state.delArray[0] }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => {
+      if (response.status === 200)
+        toast.success("تصاویر با موفقیت حذف شدند", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      else
+        toast.error("خطایی رخ داد", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+    });
   };
 
   return (

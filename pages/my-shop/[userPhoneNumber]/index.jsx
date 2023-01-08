@@ -123,7 +123,7 @@ const UserPN = ({
     });
   };
 
-  const deleteProductHandle = () => {
+  const deleteProductHandle = async () => {
     const allProducts = [...state.getProducts];
     try {
       const updatedProducts = state.getProducts.filter(
@@ -131,7 +131,7 @@ const UserPN = ({
       );
       setProducts(updatedProducts);
 
-      fetch(`/api/my-shop`, {
+      await fetch(`/api/my-shop`, {
         method: "DELETE",
         body: JSON.stringify({ productId: state.getProductId }),
         headers: {

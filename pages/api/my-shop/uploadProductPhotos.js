@@ -2,7 +2,6 @@ import { parseForm, FormidableError } from "../../../helpers/parse-form";
 
 const handler = async (req, res) => {
   if (req.method !== "POST") {
-    res.setHeader("Allow", "POST");
     res.status(405).json({
       data: null,
       error: "Method Not Allowed",
