@@ -1,4 +1,5 @@
 import { useReducer } from "react";
+
 import Image from "next/image";
 import {
   FormForSearch,

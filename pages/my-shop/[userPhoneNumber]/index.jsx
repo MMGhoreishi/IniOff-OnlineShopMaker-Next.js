@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { useEffect, useReducer } from "react";
+import { useReducer } from "react";
 import classNames from "classnames";
 import { toast } from "react-toastify";
 import {
@@ -77,11 +77,24 @@ const UserPN = ({
     newPasswordEye: true,
   });
 
-  useEffect(() => {
-    console.log("state.getProducts>>>>");
-    console.log(state.getProducts);
-    console.log(products);
-  }, [state.getProducts]);
+  const setProducts = (products) => {
+    dispatch({
+      type: ACTIONS.SET_PRODUCTS,
+      products,
+    });
+  };
+
+  // useEffect(() => {
+  //   const myObj = [...products];
+
+  //   for (let i = 0; i < myObj.length; i++) {
+  //     myObj[i]["photo1"]["url"] = myObj[i]["photo1"]["url"].replace("\\", "/");
+  //     myObj[i]["photo2"]["url"] = myObj[i]["photo2"]["url"].replace("\\", "/");
+  //     myObj[i]["photo3"]["url"] = myObj[i]["photo3"]["url"].replace("\\", "/");
+  //   }
+
+  //   setProducts(myObj);
+  // }, []);
 
   const UpdatePasswordSchema = Yup.object().shape({
     old_password: Yup.string()
@@ -151,8 +164,8 @@ const UserPN = ({
     }
   };
 
-  const updateProfileInfo = async (event) => {
-    fetch(`/api/my-shop`, {
+  const updateProfileInfo = async () => {
+    await fetch(`/api/my-shop`, {
       method: "PUT",
       body: JSON.stringify({ profileInfo: state.getProfileInfo }),
       headers: {
@@ -182,13 +195,6 @@ const UserPN = ({
           draggable: true,
           progress: undefined,
         });
-    });
-  };
-
-  const setProducts = (products) => {
-    dispatch({
-      type: ACTIONS.SET_PRODUCTS,
-      products,
     });
   };
 
@@ -680,10 +686,11 @@ const UserPN = ({
                                         <td className="fw-bold">{index + 1}</td>
                                         <td>
                                           <Image
-                                            src={`/assets/img/product-photos/${product.photo1}`}
+                                            style={{ objectFit: "cover" }}
+                                            src={`/uploads/${product.photo1.url}`}
                                             alt={product.name}
-                                            width={80}
-                                            height={60}
+                                            width={100}
+                                            height={100}
                                           />
                                         </td>
                                         <td>{product.name}</td>

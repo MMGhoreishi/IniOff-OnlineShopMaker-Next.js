@@ -29,6 +29,9 @@ const handler = async (req, res) => {
       client.close();
       res.status(201).json({ message: "It added the message well!" });
     } catch (error) {
+      console.log("######Error-contact>>>>");
+      console.log(error);
+
       client.close();
       res.status(500).json({ message: "Inserting the message failed!" });
     }

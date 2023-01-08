@@ -1681,6 +1681,9 @@ section {
 #myShop-section #discounts-table {
   min-width: 900px;
 }
+#myShop-section #discounts-table img {
+  object-fit: cover;
+}
 #myShop-section .nav {
   padding-right: 0;
 }

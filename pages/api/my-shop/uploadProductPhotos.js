@@ -1,4 +1,4 @@
-import { parseForm, FormidableError } from "../../helpers/parse-form";
+import { parseForm, FormidableError } from "../../../helpers/parse-form";
 
 const handler = async (req, res) => {
   if (req.method !== "POST") {
@@ -16,13 +16,21 @@ const handler = async (req, res) => {
     const file = files.media;
     let url = Array.isArray(file) ? file.map((f) => f.filepath) : file.filepath;
 
+    const myArray = url.split("uploads\\");
+    const [, urlText] = myArray;
+
+    const urlText2 = urlText.replace("\\", "/");
+
     res.status(200).json({
       data: {
-        url,
+        url: urlText2,
       },
       error: null,
     });
   } catch (e) {
+    console.log("######my-error>>>>>>");
+    console.log(e);
+
     if (e instanceof FormidableError) {
       res.status(e.httpCode || 400).json({ data: null, error: e.message });
     } else {

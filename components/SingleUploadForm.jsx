@@ -1,13 +1,49 @@
 import Image from "next/image";
 
-const SingleFileUploadForm = ({ name, functionHandler, file, previewUrl }) => {
+const SingleFileUploadForm = ({
+  name,
+  setFile,
+  setPreviewUrl,
+  file,
+  previewUrl,
+}) => {
   const onCancelFile = (e) => {
     e.preventDefault();
     if (!previewUrl && !file) {
       return;
     }
-    setFile("");
-    setPreviewUrl("");
+    setFile(null);
+    setPreviewUrl(null);
+  };
+
+  const onFileUploadChange = (e) => {
+    const fileInput = e.target;
+
+    if (!fileInput.files) {
+      alert("No file was chosen");
+      return;
+    }
+
+    if (!fileInput.files || fileInput.files.length === 0) {
+      alert("Files list is empty");
+      return;
+    }
+
+    const file = fileInput.files[0];
+
+    /** File validation */
+    if (!file.type.startsWith("image")) {
+      alert("Please select a valide image");
+      return;
+    }
+
+    /** Setting file state */
+    setFile(file); // we will use the file state, to send it later to the server
+    setPreviewUrl(URL.createObjectURL(file)); // we will use this to show the preview of the image
+
+    /** Reset file input */
+    e.currentTarget.type = "text";
+    e.currentTarget.type = "file";
   };
 
   return (
@@ -56,12 +92,12 @@ const SingleFileUploadForm = ({ name, functionHandler, file, previewUrl }) => {
                   className="block w-0 h-0"
                   name={name}
                   type="file"
-                  onChange={functionHandler}
+                  onChange={onFileUploadChange}
                 />
               </label>
             )}
           </div>
-          {/* <div className="flex mt-4 md:mt-0 md:flex-col justify-center gap-1.5">
+          <div className="flex mt-4 md:mt-0 md:flex-col justify-center gap-1.5">
             <button
               disabled={!previewUrl}
               onClick={onCancelFile}
@@ -70,15 +106,7 @@ const SingleFileUploadForm = ({ name, functionHandler, file, previewUrl }) => {
             >
               <i class="bi bi-camera2"></i> حذف تصویر
             </button>
-            <button
-              disabled={!previewUrl}
-              onClick={onUploadFile}
-              className="w-1/2 px-4 py-3 text-sm font-medium text-white transition-colors duration-300 bg-gray-700 rounded-sm md:w-auto md:text-base disabled:bg-gray-400 hover:bg-gray-600"
-              style={{ borderRadius: 25 }}
-            >
-              Upload file
-            </button>
-          </div> */}
+          </div>
         </div>
       </form>
     </div>

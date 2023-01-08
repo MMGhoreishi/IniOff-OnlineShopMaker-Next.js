@@ -14,7 +14,7 @@ const controlPanel = () => {
             <div className="col-12 text-center">
               <button
                 type="button"
-                class="btn btn-success rounded-pill border border-warning px-3"
+                class="btn btn-success rounded-pill border border-warning px-3 mt-2"
               >
                 <i class="bi bi-cursor"></i> بازدید از سایت
               </button>

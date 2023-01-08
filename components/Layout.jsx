@@ -7,7 +7,6 @@ import LinkReactScroll from "./LinkReactScroll";
 import BackToTopBtn from "./BackToTopBtn";
 import Image from "next/image";
 import { useSession, signOut, getSession } from "next-auth/react";
-import { toast } from "react-toastify";
 
 const ACTIONS = {
   SET_HEADER_CLASS_NAME: "SET_HEADER_CLASS_NAME",

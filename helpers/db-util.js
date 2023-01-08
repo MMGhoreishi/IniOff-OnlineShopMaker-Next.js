@@ -66,6 +66,24 @@ export const findProductsByName = async (client, name) => {
   return product;
 };
 
+export const addPhotosToProductByName = async (client, name, photosArray) => {
+  const db = await client.db(dbName);
+  const collection = await db.collection("products");
+
+  const updateResult = await collection.updateOne(
+    { name },
+    {
+      $set: {
+        photo1: photosArray[0],
+        photo2: photosArray[1],
+        photo3: photosArray[2],
+      },
+    }
+  );
+
+  return updateResult;
+};
+
 export const updateProductDiscountsByProductId = async (
   client,
   _id,

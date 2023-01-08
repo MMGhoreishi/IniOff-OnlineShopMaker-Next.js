@@ -21,7 +21,6 @@ const reducer = (state, action) => {
 };
 
 const SignIn = ({ session }) => {
-
   const router = useRouter();
 
   const [state, dispatch] = useReducer(reducer, {
