@@ -1605,6 +1605,8 @@ section {
   transition: filter 0.5s ease-in-out;
   -webkit-filter: grayscale(0%);
   filter: grayscale(0%);
+
+  object-fit: cover;
 }
 .inner-page img:hover {
   -webkit-filter: grayscale(100%);

@@ -1,6 +1,7 @@
 import { AddTitle, NothingFound, ShowProduct } from "../../components";
 import { useReducer } from "react";
-import { connectDatabase, findDocumentById } from "../../helpers/db-util";
+import { connectDatabase, findProductById } from "../../helpers/db-util";
+import { findUserByPN } from "../../helpers/auth";
 
 const ACTIONS = {
   //SET_NOT_FOUND_PRODUCT: "SET_NOT_FOUND_PRODUCT",
@@ -69,7 +70,7 @@ export const getServerSideProps = async (context) => {
 
   if (statusNumber != 500)
     try {
-      product = await findDocumentById(client, "products", productId);
+      product = await findProductById(client, productId);
 
       if (product.length > 0) {
         product = product.map((p) => {
@@ -79,7 +80,8 @@ export const getServerSideProps = async (context) => {
 
         product = product[0];
 
-        userData = await findDocumentById(client, "users", product.userId);
+        userData = await findUserByPN(client, product.userPhoneNumber);
+
         if (userData.length > 0) {
           userData = userData.map((u) => {
             u._id = u._id.toString();

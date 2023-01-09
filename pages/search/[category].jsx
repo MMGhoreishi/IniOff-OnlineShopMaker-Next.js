@@ -74,7 +74,7 @@ const Category = ({ products, category, getShowPermission, statusNumber }) => {
                       <div className="card">
                         <Image
                           className="card-img-top"
-                          src={`/assets/img/product-photos/${product.photo1}`}
+                          src={`/uploads/${product.photo1.url}`}
                           alt={product.name}
                           width={500}
                           height={450}

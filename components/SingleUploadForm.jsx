@@ -87,7 +87,9 @@ const SingleFileUploadForm = ({
                     d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
                   />
                 </svg>
-                <strong className="text-sm font-medium">Select an image</strong>
+                <strong className="text-sm font-medium">
+                  انتخاب تصویر محصول
+                </strong>
                 <input
                   className="block w-0 h-0"
                   name={name}

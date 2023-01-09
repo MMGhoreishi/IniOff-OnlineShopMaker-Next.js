@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef } from "react";
+import { useReducer, useRef } from "react";
 import { toast } from "react-toastify";
 import SingleFileUploadForm from "./SingleUploadForm";
 
@@ -57,11 +57,11 @@ const AddOrEditContent = ({
 
   const [state, dispatch] = useReducer(reducer, {
     file1: null,
-    previewUrl1: null,
+    previewUrl1: addOrEdit === "edit" ? `/uploads/${product.photo1.url}` : null,
     file2: null,
-    previewUrl2: null,
+    previewUrl2: addOrEdit === "edit" ? `/uploads/${product.photo2.url}` : null,
     file3: null,
-    previewUrl3: null,
+    previewUrl3: addOrEdit === "edit" ? `/uploads/${product.photo3.url}` : null,
     delArray: [],
     getProduct: {
       name: "",
@@ -145,14 +145,6 @@ const AddOrEditContent = ({
       [name]: value,
     });
   };
-
-  useEffect(() => {
-    setProduct(
-      addOrEdit === "edit" && {
-        ...product,
-      }
-    );
-  }, [product]);
 
   const editProduct = async () => {
     //Start-Validation
@@ -302,9 +294,6 @@ const AddOrEditContent = ({
 
       const uploadPhotos = await onUploadFile();
 
-      console.log("uploadPhotos-photos-await>>>>>");
-      console.log(uploadPhotos);
-
       setDelArray(uploadPhotos);
 
       const objValue = {
@@ -357,6 +346,22 @@ const AddOrEditContent = ({
 
         if (response.status === 201) {
           closeRef.current.click();
+
+          setProduct({
+            name: null,
+            numberOfDiscounts: null,
+            price: null,
+            discount: null,
+            description: null,
+            photo1: null,
+            photo2: null,
+            photo3: null,
+            category: null,
+          });
+
+          setPreviewUrl1(null);
+          setPreviewUrl2(null);
+          setPreviewUrl3(null);
 
           toast.success("محصول با موفقیت اضافه شد", {
             position: "top-center",
@@ -516,6 +521,7 @@ const AddOrEditContent = ({
               type="number"
               className="form-control"
               name="numberOfDiscounts"
+              value={state.getProduct.numberOfDiscounts || ""}
               onChange={setProductInfo}
             />
           </div>

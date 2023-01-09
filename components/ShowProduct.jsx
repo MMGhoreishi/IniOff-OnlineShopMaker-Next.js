@@ -35,11 +35,7 @@ const ShowProduct = ({ product, userInformation }) => {
               >
                 {" "}
                 <Image
-                  src={
-                    product.photo1
-                      ? `/assets/img/product-photos/${product.photo1}`
-                      : null
-                  }
+                  src={product.photo1 ? `/uploads/${product.photo1.url}` : null}
                   alt={product.name}
                   layout="fill"
                 />
@@ -55,11 +51,7 @@ const ShowProduct = ({ product, userInformation }) => {
               >
                 {" "}
                 <Image
-                  src={
-                    product.photo2
-                      ? `/assets/img/product-photos/${product.photo2}`
-                      : null
-                  }
+                  src={product.photo2 ? `/uploads/${product.photo2.url}` : null}
                   alt={product.name}
                   layout="fill"
                 />
@@ -75,11 +67,7 @@ const ShowProduct = ({ product, userInformation }) => {
               >
                 {" "}
                 <Image
-                  src={
-                    product.photo3
-                      ? `/assets/img/product-photos/${product.photo3}`
-                      : null
-                  }
+                  src={product.photo3 ? `/uploads/${product.photo3.url}` : null}
                   alt={product.name}
                   layout="fill"
                 />
