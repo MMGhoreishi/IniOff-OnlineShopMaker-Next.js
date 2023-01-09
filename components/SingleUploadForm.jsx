@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 const SingleFileUploadForm = ({
   name,
@@ -20,12 +21,30 @@ const SingleFileUploadForm = ({
     const fileInput = e.target;
 
     if (!fileInput.files) {
-      alert("No file was chosen");
+      toast.error("فایلی انتخاب نشده است", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
       return;
     }
 
     if (!fileInput.files || fileInput.files.length === 0) {
-      alert("Files list is empty");
+      toast.error("لیست فایل ها خالی است", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
       return;
     }
 
@@ -33,7 +52,16 @@ const SingleFileUploadForm = ({
 
     /** File validation */
     if (!file.type.startsWith("image")) {
-      alert("Please select a valide image");
+      toast.error("لطفا یک تصویر معتبر انتخاب کنید", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
       return;
     }
 
