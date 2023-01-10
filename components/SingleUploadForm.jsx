@@ -122,6 +122,7 @@ const SingleFileUploadForm = ({
                   className="block w-0 h-0"
                   name={name}
                   type="file"
+                  accept="image/png,image/jpeg"
                   onChange={onFileUploadChange}
                 />
               </label>
