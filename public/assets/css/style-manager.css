@@ -55,6 +55,7 @@
 
 body {
   background-image: linear-gradient(to left, #6c757d, #bfc1c2);
+  overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
 /*--------------------------------------------------------------
@@ -106,4 +107,9 @@ body {
 #control-panel .manage-row {
   background-color: white;
   border-top: solid 3px #ffc107;
+
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
 }
