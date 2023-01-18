@@ -41,6 +41,7 @@ const reducer = (state, action) => {
       return { ...state, previewUrl3: action.previewUrl };
     case ACTIONS.SET_DEL_ARRAY:
       return { ...state, delArray: action.delArray };
+
     default:
       return state;
   }
@@ -220,7 +221,7 @@ const AddOrEditContent = ({
       }
 
       try {
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append("media", myFile);
 
         const res = await fetch("/api/my-shop/uploadProductPhotos", {
@@ -281,6 +282,7 @@ const AddOrEditContent = ({
       myObjErr[result[i]] = true;
     }
     setErrProduct(myObjErr);
+
     if (result.length > 0) return;
     //End-Validation
 

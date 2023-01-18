@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { toast } from "react-toastify";
+import { uploadImageValidation } from "../helpers/validation";
 
 const SingleFileUploadForm = ({
   name,
@@ -8,62 +9,48 @@ const SingleFileUploadForm = ({
   file,
   previewUrl,
 }) => {
-  const onCancelFile = (e) => {
-    e.preventDefault();
-    if (!previewUrl && !file) {
-      return;
-    }
-    setFile(null);
-    setPreviewUrl(null);
-  };
+  const onFileUploadChange = async (e) => {
+    const myTest = "rrrr";
 
-  const onFileUploadChange = (e) => {
+    fetch(`/api/my-shop/validateProductPhotos/${myTest}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => {
+      console.log("response.status-pppp>>>>");
+      console.log(response.status);
+    });
+
+    // await fetch("/api/my-shop/validateProductPhotos", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     fileInputFiles,
+    //   }),
+
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // }).then((response) => {
+    //   if (response.status === 200) {
+    //     console.log("response.status-ipt>>>>>>");
+    //     console.log("---200");
+    //     return;
+    //   } else {
+    //     console.log("response.status-ipt>>>>>>");
+    //     console.log("---500");
+    //     return;
+    //   }
+    // });
+
+    const result = uploadImageValidation(e.target);
+    if (!result) return;
+
     const fileInput = e.target;
-
-    if (!fileInput.files) {
-      toast.error("فایلی انتخاب نشده است", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-
-      return;
-    }
-
-    if (!fileInput.files || fileInput.files.length === 0) {
-      toast.error("لیست فایل ها خالی است", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-
-      return;
-    }
-
     const file = fileInput.files[0];
 
-    /** File validation */
-    if (!file.type.startsWith("image")) {
-      toast.error("لطفا یک تصویر معتبر انتخاب کنید", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-
-      return;
-    }
+    console.log("ClientSide-fileInput>>>>>");
+    console.log(file);
 
     /** Setting file state */
     setFile(file); // we will use the file state, to send it later to the server
@@ -72,6 +59,15 @@ const SingleFileUploadForm = ({
     /** Reset file input */
     e.currentTarget.type = "text";
     e.currentTarget.type = "file";
+  };
+
+  const onCancelFile = (e) => {
+    e.preventDefault();
+    if (!previewUrl && !file) {
+      return;
+    }
+    setFile(null);
+    setPreviewUrl(null);
   };
 
   return (

@@ -1,4 +1,4 @@
-import { AddTitle } from "../../components";
+import { AddTitle } from "../../../components";
 
 const controlPanel = () => {
   return (
@@ -9,7 +9,7 @@ const controlPanel = () => {
         <div class="container">
           <div class="row  py-5">
             <div class="col-12 text-center text-white h2 fw-light title-form">
-              <i class="bi bi-gear-wide-connected"></i> کنترل پنل
+              <i class="bi bi-gear-wide-connected"></i> کنترل پنل - صفحه اصلی
             </div>
             <div className="col-12 text-center">
               <button

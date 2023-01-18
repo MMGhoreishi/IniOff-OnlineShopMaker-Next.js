@@ -13,8 +13,8 @@ const handler = async (req, res) => {
     const { fields, files } = await parseForm(req);
 
     const file = files.media;
-    let url = Array.isArray(file) ? file.map((f) => f.filepath) : file.filepath;
 
+    let url = Array.isArray(file) ? file.map((f) => f.filepath) : file.filepath;
     const myArray = url.split("uploads\\");
     const [, urlText] = myArray;
 
