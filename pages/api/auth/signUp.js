@@ -27,7 +27,20 @@ const handler = async (req, res) => {
       return;
     }
 
-    const validateEmpty = validateEmptyForm(req.body);
+    console.log("$$$$$$$$$$$$req.body-empty>>>>>>>>>");
+    console.log(req.body);
+
+    const objFormKeys_Array = [
+      "name",
+      "instagram",
+      "companyName",
+      "phoneNumber",
+      "email",
+      "password",
+      "repeatedPassword",
+    ];
+    const myDataSignUp = req.body;
+    const validateEmpty = validateEmptyForm(myDataSignUp, objFormKeys_Array);
     if (validateEmpty) {
       res.status(500).json({ message: "All fields are required" });
       return;

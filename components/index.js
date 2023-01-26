@@ -9,4 +9,3 @@ export { default as AddTitle } from "./AddTitle";
 export { default as PasswordInput } from "./PasswordInput";
 export { default as Contact } from "./Contact";
 export { default as SingleFileUploadForm } from "./SingleUploadForm";
-export { default as AdminLayout } from "./AdminLayout";

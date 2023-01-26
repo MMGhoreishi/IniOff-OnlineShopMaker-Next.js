@@ -111,7 +111,6 @@ const SignIn = ({ session }) => {
           <div class="row">
             <div class="col-md-6">
               <h2 class="mb-5 fw-bold text-center">ورود به فروشگاه</h2>
-
               <Formik
                 initialValues={{ email: "", password: "" }}
                 validationSchema={SignInSchema}
@@ -183,7 +182,7 @@ const SignIn = ({ session }) => {
                           type="submit"
                           class="btn btn-login-register btn-block btn-lg"
                         >
-                          <i class="bi bi-code-slash"></i> ارسال کد
+                          <i class="bi bi-door-open"></i> ورود
                         </button>
                       </div>
                     </Form>

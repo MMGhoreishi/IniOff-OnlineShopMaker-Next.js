@@ -31,6 +31,9 @@ const SignUp = ({ session }) => {
   const router = useRouter();
 
   useEffect(() => {
+    console.log("session-useEffect>>>.");
+    console.log(session);
+
     if (session !== "Not-Entered") userStatus();
   }, []);
 
@@ -96,6 +99,9 @@ const SignUp = ({ session }) => {
   });
 
   const createNewUser = async (values, { resetForm }) => {
+    console.log("createNewUser-values>>>>>");
+    console.log(values);
+
     const {
       name,
       instagram,
@@ -399,7 +405,7 @@ const SignUp = ({ session }) => {
                           type="submit"
                           class="btn btn-login-register btn-block btn-lg"
                         >
-                          <i class="bi bi-code-slash"></i> ارسال کد
+                          <i class="bi bi-person-plus-fill"></i> ثبت نام
                         </button>
                       </div>
                     </Form>
@@ -431,6 +437,9 @@ export default SignUp;
 
 export const getServerSideProps = async (context) => {
   let session = await getSession({ req: context.req });
+
+  console.log("$$$$$$$$$$$$$$$my-register-session>>>>");
+  console.log(session);
 
   if (!session)
     return {

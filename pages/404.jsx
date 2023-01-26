@@ -16,22 +16,6 @@ const NotFound = () => {
               height={400}
             />
           </div>
-          <div className="col-12">
-            <div
-              style={{ maxWidth: 500 }}
-              class="border border-success mx-auto alert alert-warning text-center fw-bold h5 mt-3"
-              role="alert"
-            >
-              متاسفم چنین صفحه ای یافت نشد
-              <div className="mt-3 text-capitalize">
-                <Link href="/">
-                  <button type="button" className="btn btn-primary btn-lg">
-                    صفحه اصلی
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </>

@@ -27,7 +27,18 @@ export default NextAuth({
 
         const { email, password } = credentials;
 
-        const validateEmpty = validateEmptyForm({ email, password });
+        const myDataSignIn = { email, password };
+
+        const objFormKeys_Array = ["email", "password"];
+
+        const validateEmpty = validateEmptyForm(
+          myDataSignIn,
+          objFormKeys_Array
+        );
+
+        console.log("$$$$$$$$$$$$$$$$validateEmpty-signIn>>>>>>>>>>>>>>>>>>>>");
+        console.log(validateEmpty);
+
         if (validateEmpty) throw new Error("All fields are required");
 
         if (!ValidateEmail(email)) throw new Error("The email-format is wrong");
