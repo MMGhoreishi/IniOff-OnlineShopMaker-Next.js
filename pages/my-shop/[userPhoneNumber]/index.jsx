@@ -10,6 +10,7 @@ import {
   AddTitle,
   ModalForDelete,
   PasswordInput,
+  Pagination,
 } from "../../../components";
 import { findUserByEmail } from "../../../helpers/auth";
 import {
@@ -762,73 +763,8 @@ const UserPN = ({
                                   })}
                                 </tbody>
                               </table>
-                            </div>{" "}
-                            <ul className="pagination pagination-circle  justify-content-center">
-                              <li className="page-item">
-                                <a className="page-link" href="#">
-                                  <span aria-hidden="true">&laquo;</span>
-                                </a>
-                              </li>
-                              <li className="page-item">
-                                <a className="page-link" href="#">
-                                  1
-                                </a>
-                              </li>
-                              <li className="page-item active">
-                                <a className="page-link" href="#">
-                                  2
-                                </a>
-                              </li>
-                              <li className="page-item">
-                                <a className="page-link" href="#">
-                                  3
-                                </a>
-                              </li>
-                              <li className="page-item">
-                                <a className="page-link" href="#">
-                                  <span aria-hidden="true">&raquo;</span>
-                                </a>
-                              </li>
-                            </ul>
-                            {/* <ul class="pagination pagination-circle pagination-lg justify-content-center">
-                              <li class="page-item">
-                                <a class="page-link">First</a>
-                              </li>
-
-                              <li class="page-item">
-                                <a class="page-link" aria-label="Previous">
-                                  <span aria-hidden="true">&laquo;</span>
-                                  <span class="sr-only">Previous</span>
-                                </a>
-                              </li>
-
-                              <li class="page-item active">
-                                <a class="page-link">1</a>
-                              </li>
-                              <li class="page-item">
-                                <a class="page-link">2</a>
-                              </li>
-                              <li class="page-item">
-                                <a class="page-link">3</a>
-                              </li>
-                              <li class="page-item">
-                                <a class="page-link">4</a>
-                              </li>
-                              <li class="page-item">
-                                <a class="page-link">5</a>
-                              </li>
-
-                              <li class="page-item">
-                                <a class="page-link" aria-label="Next">
-                                  <span aria-hidden="true">&raquo;</span>
-                                  <span class="sr-only">Next</span>
-                                </a>
-                              </li>
-
-                              <li class="page-item">
-                                <a class="page-link">Last</a>
-                              </li>
-                            </ul> */}
+                            </div>
+                            <Pagination />
                           </>
                         ) : (
                           <NothingFound text="محصولی موجود نیست اما شما می توانید محصول اضافه کنید" />
