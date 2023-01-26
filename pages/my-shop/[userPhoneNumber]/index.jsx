@@ -763,10 +763,10 @@ const UserPN = ({
                                 </tbody>
                               </table>
                             </div>{" "}
-                            <ul className="pagination pagination-lg justify-content-center">
+                            <ul className="pagination pagination-circle  justify-content-center">
                               <li className="page-item">
                                 <a className="page-link" href="#">
-                                  Previous
+                                  <span aria-hidden="true">&laquo;</span>
                                 </a>
                               </li>
                               <li className="page-item">
@@ -786,10 +786,49 @@ const UserPN = ({
                               </li>
                               <li className="page-item">
                                 <a className="page-link" href="#">
-                                  Next
+                                  <span aria-hidden="true">&raquo;</span>
                                 </a>
                               </li>
-                            </ul>{" "}
+                            </ul>
+                            {/* <ul class="pagination pagination-circle pagination-lg justify-content-center">
+                              <li class="page-item">
+                                <a class="page-link">First</a>
+                              </li>
+
+                              <li class="page-item">
+                                <a class="page-link" aria-label="Previous">
+                                  <span aria-hidden="true">&laquo;</span>
+                                  <span class="sr-only">Previous</span>
+                                </a>
+                              </li>
+
+                              <li class="page-item active">
+                                <a class="page-link">1</a>
+                              </li>
+                              <li class="page-item">
+                                <a class="page-link">2</a>
+                              </li>
+                              <li class="page-item">
+                                <a class="page-link">3</a>
+                              </li>
+                              <li class="page-item">
+                                <a class="page-link">4</a>
+                              </li>
+                              <li class="page-item">
+                                <a class="page-link">5</a>
+                              </li>
+
+                              <li class="page-item">
+                                <a class="page-link" aria-label="Next">
+                                  <span aria-hidden="true">&raquo;</span>
+                                  <span class="sr-only">Next</span>
+                                </a>
+                              </li>
+
+                              <li class="page-item">
+                                <a class="page-link">Last</a>
+                              </li>
+                            </ul> */}
                           </>
                         ) : (
                           <NothingFound text="محصولی موجود نیست اما شما می توانید محصول اضافه کنید" />
@@ -815,7 +854,6 @@ const UserPN = ({
                       <i className="bi bi-file-earmark-plus"></i> اضافه کردن
                       محصول
                     </h4>
-                    {/* onClick={removePreview} */}
                     <button
                       type="button"
                       className="btn-close m-0"
@@ -824,7 +862,6 @@ const UserPN = ({
                   </div>
                   {/* Modal body */}
                   <div className="modal-body text-center">
-                    {/* removePreview={removePreview} */}
                     <AddOrEditContent
                       addOrEdit="add"
                       userPhoneNumber={userPhoneNumber}
