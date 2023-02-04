@@ -141,8 +141,8 @@ const Layout = ({ children }) => {
             })}
             src="/assets/img/logo.png"
             alt="Logo"
-            width={70}
-            height={70}
+            width={50}
+            height={50}
           />
 
           <nav id="navbar" className="navbar float-start">

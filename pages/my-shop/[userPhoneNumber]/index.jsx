@@ -26,10 +26,10 @@ const ACTIONS = {
   SET_PRODUCT_ID: "SET_PRODUCT_ID",
   SET_PROFILE_INFO: "SET_PROFILE_INFO",
   SET_PROFILE_VIEW: "SET_PROFILE_VIEW",
-  SET_OLD_PASSWORD: "SET_OLD_PASSWORD",
-  SET_NEW_PASSWORD: "SET_NEW_PASSWORD",
   SET_OLD_PASSWORD_EYE: "SET_OLD_PASSWORD_EYE",
   SET_NEW_PASSWORD_EYE: "SET_NEW_PASSWORD_EYE",
+  SET_CURRENT_PAGE: "SET_CURRENT_PAGE",
+  SET_N_PAGES: "SET_N_PAGES",
 };
 
 const reducer = (state, action) => {
@@ -42,14 +42,14 @@ const reducer = (state, action) => {
       return { ...state, getProfileInfo: action.profileInfo };
     case ACTIONS.SET_PROFILE_VIEW:
       return { ...state, profileView: action.text };
-    case ACTIONS.SET_OLD_PASSWORD:
-      return { ...state, oldPassword: action.oldPassword };
-    case ACTIONS.SET_NEW_PASSWORD:
-      return { ...state, newPassword: action.newPassword };
     case ACTIONS.SET_OLD_PASSWORD_EYE:
       return { ...state, oldPasswordEye: action.oldPasswordEye };
     case ACTIONS.SET_NEW_PASSWORD_EYE:
       return { ...state, newPasswordEye: action.newPasswordEye };
+    case ACTIONS.SET_CURRENT_PAGE:
+      return { ...state, currentPage: action.currentPage };
+    case ACTIONS.SET_N_PAGES:
+      return { ...state, nPages: action.nPages };
     default:
       return state;
   }
@@ -65,23 +65,33 @@ const UserPN = ({
   const router = useRouter();
   const { userPhoneNumber } = router.query;
   const [state, dispatch] = useReducer(reducer, {
-    getProducts: products,
+    getProducts: null,
     getUserStatus: userStatus,
     getProductId: 0,
     getProfileInfo: userData,
     checkUserPhoneNumberInDb,
     profileView: "edit-profile",
 
-    oldPassword: "",
-    newPassword: "",
     oldPasswordEye: true,
     newPasswordEye: true,
+
+    currentPage: 1,
+    nPages: 0,
   });
 
-  useEffect(() => {
-    console.log("state.getProducts-useEffect>>>>>");
-    console.log(state.getProducts);
-  }, [state.getProducts]);
+  const setNPages = (nPages) => {
+    dispatch({
+      type: ACTIONS.SET_N_PAGES,
+      nPages,
+    });
+  };
+
+  const setCurrentPage = (currentPage) => {
+    dispatch({
+      type: ACTIONS.SET_CURRENT_PAGE,
+      currentPage,
+    });
+  };
 
   const setProducts = (products) => {
     dispatch({
@@ -217,20 +227,6 @@ const UserPN = ({
     setProductId(productId);
   };
 
-  const setOldPassword = (oldPassword) => {
-    dispatch({
-      type: ACTIONS.SET_OLD_PASSWORD,
-      oldPassword: oldPassword.target.value,
-    });
-  };
-
-  const setNewPassword = (newPassword) => {
-    dispatch({
-      type: ACTIONS.SET_NEW_PASSWORD,
-      newPassword: newPassword.target.value,
-    });
-  };
-
   const changePasswordHandler = async (event) => {
     event.preventDefault();
 
@@ -316,6 +312,14 @@ const UserPN = ({
       }
     });
   };
+
+  useEffect(() => {
+    const recordsPerPage = 4;
+    const indexOfLastRecord = state.currentPage * recordsPerPage;
+    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+    setProducts(products.slice(indexOfFirstRecord, indexOfLastRecord));
+    setNPages(Math.ceil(products.length / recordsPerPage));
+  }, [state.currentPage]);
 
   switch (state.checkUserPhoneNumberInDb) {
     case "Confirmed":
@@ -764,7 +768,14 @@ const UserPN = ({
                                 </tbody>
                               </table>
                             </div>
-                            <Pagination />
+
+                            <div className=" text-center">
+                              <Pagination
+                                nPages={state.nPages}
+                                currentPage={state.currentPage}
+                                setCurrentPage={setCurrentPage}
+                              />
+                            </div>
                           </>
                         ) : (
                           <NothingFound text="محصولی موجود نیست اما شما می توانید محصول اضافه کنید" />

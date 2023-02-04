@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { connectDatabase, findProductsByCategory } from "../../helpers/db-util";
@@ -14,6 +14,8 @@ import {
 const ACTIONS = {
   SET_YOUR_CATEGORY: "SET_YOUR_CATEGORY",
   SET_YOUR_PRODUCTS: "SET_YOUR_PRODUCTS",
+  SET_CURRENT_PAGE: "SET_CURRENT_PAGE",
+  SET_N_PAGES: "SET_N_PAGES",
 };
 
 const reducer = (state, action) => {
@@ -22,30 +24,41 @@ const reducer = (state, action) => {
       return { ...state, yourCategory: action.yourCategory };
     case ACTIONS.SET_YOUR_PRODUCTS:
       return { ...state, products: action.products };
+    case ACTIONS.SET_CURRENT_PAGE:
+      return { ...state, currentPage: action.currentPage };
+    case ACTIONS.SET_N_PAGES:
+      return { ...state, nPages: action.nPages };
     default:
       return state;
   }
 };
 
 const Category = ({ products, category, getShowPermission, statusNumber }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [nPages, setNPages] = useState(0);
-
-  // const [recordsPerPage] = useState(2);
-  // const [indexOfLastRecord, setIndexOfLastRecord] = useState(0);
-  // const [indexOfFirstRecord, setIndexOfFirstRecord] = useState(0);
-  //const [currentRecords, setCurrentRecords] = useState([]);
-  //const [nPages, setNPages] = useState(0);
-
   const [state, dispatch] = useReducer(reducer, {
     yourCategory: null,
     products: null,
+    currentPage: 1,
+    nPages: 0,
   });
+
+  const setNPages = (nPages) => {
+    dispatch({
+      type: ACTIONS.SET_N_PAGES,
+      nPages,
+    });
+  };
+
+  const setCurrentPage = (currentPage) => {
+    dispatch({
+      type: ACTIONS.SET_CURRENT_PAGE,
+      currentPage,
+    });
+  };
 
   const setYourCategory = (yourCategory) => {
     dispatch({
       type: ACTIONS.SET_YOUR_CATEGORY,
-      yourCategory: yourCategory,
+      yourCategory,
     });
   };
 
@@ -59,26 +72,12 @@ const Category = ({ products, category, getShowPermission, statusNumber }) => {
   useEffect(() => {
     setYourCategory(category);
 
-    const recordsPerPage = 2;
-    const indexOfLastRecord = currentPage * recordsPerPage;
+    const recordsPerPage = 4;
+    const indexOfLastRecord = state.currentPage * recordsPerPage;
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
     setYourProducts(products.slice(indexOfFirstRecord, indexOfLastRecord));
     setNPages(Math.ceil(products.length / recordsPerPage));
-  }, [currentPage]);
-  //[products, category]
-  // useEffect(() => {
-  //   setIndexOfFirstRecord(indexOfLastRecord - recordsPerPage);
-  // }, [indexOfLastRecord]);
-
-  // useEffect(() => {
-  //   console.log("indexOfFirstRecord>>>>");
-  //   console.log(indexOfFirstRecord);
-
-  //   console.log("indexOfLastRecord>>>>");
-  //   console.log(indexOfLastRecord);
-
-  //   setYourProducts(products.slice(indexOfFirstRecord, indexOfLastRecord));
-  // }, [indexOfFirstRecord]);
+  }, [state.currentPage]);
 
   return (
     <>
@@ -163,10 +162,10 @@ const Category = ({ products, category, getShowPermission, statusNumber }) => {
                   ))}
               </div>
               <div className="row">
-                <div className="col">
+                <div className="col text-center">
                   <Pagination
-                    nPages={nPages}
-                    currentPage={currentPage}
+                    nPages={state.nPages}
+                    currentPage={state.currentPage}
                     setCurrentPage={setCurrentPage}
                   />
                 </div>

@@ -1,14 +1,4 @@
-import { useEffect } from "react";
-
 const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
-  useEffect(() => {
-    console.log("nPages>>>>");
-    console.log(nPages);
-
-    console.log("currentPage>>>>");
-    console.log(currentPage);
-  }, [nPages, currentPage]);
-
   const pageNumbers = [...Array(nPages + 1).keys()].slice(1);
 
   const nextPage = () => {
@@ -18,11 +8,11 @@ const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
     if (currentPage !== 1) setCurrentPage(currentPage - 1);
   };
   return (
-    <nav>
+    <div className="text-center paginationContainer">
       <ul className="pagination pagination-circle justify-content-center">
         <li className="page-item">
           <span className="page-link" onClick={prevPage}>
-            قبلی
+            <i class="bi bi-caret-right"></i>
           </span>
         </li>
         {pageNumbers.map((pgNumber) => (
@@ -40,11 +30,11 @@ const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
         ))}
         <li className="page-item">
           <span className="page-link" onClick={nextPage}>
-            بعدی
+            <i class="bi bi-caret-left"></i>
           </span>
         </li>
       </ul>
-    </nav>
+    </div>
   );
 };
 
