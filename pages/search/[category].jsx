@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { connectDatabase, findProductsByCategory } from "../../helpers/db-util";
@@ -28,15 +28,19 @@ const reducer = (state, action) => {
 };
 
 const Category = ({ products, category, getShowPermission, statusNumber }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nPages, setNPages] = useState(0);
+
+  // const [recordsPerPage] = useState(2);
+  // const [indexOfLastRecord, setIndexOfLastRecord] = useState(0);
+  // const [indexOfFirstRecord, setIndexOfFirstRecord] = useState(0);
+  //const [currentRecords, setCurrentRecords] = useState([]);
+  //const [nPages, setNPages] = useState(0);
+
   const [state, dispatch] = useReducer(reducer, {
     yourCategory: null,
     products: null,
   });
-
-  useEffect(() => {
-    setYourCategory(category);
-    setYourProducts(products);
-  }, [products, category]);
 
   const setYourCategory = (yourCategory) => {
     dispatch({
@@ -48,9 +52,33 @@ const Category = ({ products, category, getShowPermission, statusNumber }) => {
   const setYourProducts = (products) => {
     dispatch({
       type: ACTIONS.SET_YOUR_PRODUCTS,
-      products: products,
+      products,
     });
   };
+
+  useEffect(() => {
+    setYourCategory(category);
+
+    const recordsPerPage = 2;
+    const indexOfLastRecord = currentPage * recordsPerPage;
+    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+    setYourProducts(products.slice(indexOfFirstRecord, indexOfLastRecord));
+    setNPages(Math.ceil(products.length / recordsPerPage));
+  }, [currentPage]);
+  //[products, category]
+  // useEffect(() => {
+  //   setIndexOfFirstRecord(indexOfLastRecord - recordsPerPage);
+  // }, [indexOfLastRecord]);
+
+  // useEffect(() => {
+  //   console.log("indexOfFirstRecord>>>>");
+  //   console.log(indexOfFirstRecord);
+
+  //   console.log("indexOfLastRecord>>>>");
+  //   console.log(indexOfLastRecord);
+
+  //   setYourProducts(products.slice(indexOfFirstRecord, indexOfLastRecord));
+  // }, [indexOfFirstRecord]);
 
   return (
     <>
@@ -136,7 +164,11 @@ const Category = ({ products, category, getShowPermission, statusNumber }) => {
               </div>
               <div className="row">
                 <div className="col">
-                  <Pagination />
+                  <Pagination
+                    nPages={nPages}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                  />
                 </div>
               </div>
             </>

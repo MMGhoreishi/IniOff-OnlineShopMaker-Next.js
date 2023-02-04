@@ -60,6 +60,7 @@ h6,
 }
 
 .pagination .page-item .page-link:hover {
+  cursor: pointer;
   -webkit-transition: all 0.3s linear;
   transition: all 0.3s linear;
   border-radius: 0.125rem;
