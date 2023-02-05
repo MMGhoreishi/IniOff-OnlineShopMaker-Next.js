@@ -13,8 +13,9 @@ const handler = async (req, res) => {
 
     try {
       const { contactData } = req.body;
+      const contactDataKeys = ["name", "email", "subject", "message"];
 
-      const validateEmpty = validateEmptyForm(contactData);
+      const validateEmpty = validateEmptyForm(contactData, contactDataKeys);
       if (validateEmpty) {
         res.status(500).json({ message: "All fields are required" });
         return;
