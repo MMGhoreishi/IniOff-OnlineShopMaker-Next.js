@@ -169,11 +169,11 @@ const SignUp = ({ session }) => {
     <>
       {" "}
       <AddTitle title="ساخت فروشگاه" />
-      <section class="inner-page mt-5" id="login-register-section">
-        <div class="container shadow-lg mt-5 py-5">
-          <div class="row">
-            <div class="col-md-6">
-              <h2 class="mb-5 fw-bold text-center">ساخت فروشگاه شما</h2>
+      <section className="inner-page mt-5" id="login-register-section">
+        <div className="container shadow-lg mt-5 py-5">
+          <div className="row">
+            <div className="col-md-6">
+              <h2 className="mb-5 fw-bold text-center">ساخت فروشگاه شما</h2>
 
               <Formik
                 initialValues={{
@@ -191,12 +191,12 @@ const SignUp = ({ session }) => {
                 {({ touched, errors, isSubmitting, values }) =>
                   !isSubmitting ? (
                     <Form>
-                      <div class="input-group mb-3 input-group-lg">
+                      <div className="input-group mb-3 input-group-lg">
                         <span
-                          class="input-group-text"
+                          className="input-group-text"
                           style={{ borderRadius: "0 25px 25px 0" }}
                         >
-                          <i class="bi bi-person-circle"></i>
+                          <i className="bi bi-person-circle"></i>
                         </span>
 
                         <Field
@@ -218,12 +218,12 @@ const SignUp = ({ session }) => {
                         />
                       </div>
 
-                      <div class="input-group mb-3 input-group-lg">
+                      <div className="input-group mb-3 input-group-lg">
                         <span
-                          class="input-group-text"
+                          className="input-group-text"
                           style={{ borderRadius: "0 25px 25px 0" }}
                         >
-                          <i class="bi bi-instagram"></i>
+                          <i className="bi bi-instagram"></i>
                         </span>
 
                         <Field
@@ -249,12 +249,12 @@ const SignUp = ({ session }) => {
                         />
                       </div>
 
-                      <div class="input-group mb-3 input-group-lg">
+                      <div className="input-group mb-3 input-group-lg">
                         <span
-                          class="input-group-text"
+                          className="input-group-text"
                           style={{ borderRadius: "0 25px 25px 0" }}
                         >
-                          <i class="bi bi-building"></i>
+                          <i className="bi bi-building"></i>
                         </span>
 
                         <Field
@@ -280,12 +280,12 @@ const SignUp = ({ session }) => {
                         />
                       </div>
 
-                      <div class="input-group mb-3 input-group-lg">
+                      <div className="input-group mb-3 input-group-lg">
                         <span
-                          class="input-group-text"
+                          className="input-group-text"
                           style={{ borderRadius: "0 25px 25px 0" }}
                         >
-                          <i class="bi bi-telephone-fill"></i>
+                          <i className="bi bi-telephone-fill"></i>
                         </span>
 
                         <Field
@@ -311,14 +311,14 @@ const SignUp = ({ session }) => {
                         />
                       </div>
 
-                      <div class="input-group mb-3 input-group-lg">
+                      <div className="input-group mb-3 input-group-lg">
                         <span
-                          class="input-group-text"
+                          className="input-group-text"
                           style={{
                             borderRadius: "0 25px 25px 0",
                           }}
                         >
-                          <i class="bi bi-envelope-fill"></i>
+                          <i className="bi bi-envelope-fill"></i>
                         </span>
 
                         <Field
@@ -340,7 +340,7 @@ const SignUp = ({ session }) => {
                         />
                       </div>
 
-                      <div class="input-group mb-3 input-group-lg">
+                      <div className="input-group mb-3 input-group-lg">
                         <PasswordInput
                           passwordHandler={setNewPasswordEye}
                           passwordEye={state.newPasswordEye}
@@ -369,7 +369,7 @@ const SignUp = ({ session }) => {
                         </PasswordInput>
                       </div>
 
-                      <div class="input-group mb-3 input-group-lg">
+                      <div className="input-group mb-3 input-group-lg">
                         <PasswordInput
                           passwordHandler={setRepeatedPasswordEye}
                           passwordEye={state.repeatedPasswordEye}
@@ -400,12 +400,12 @@ const SignUp = ({ session }) => {
                         </PasswordInput>
                       </div>
 
-                      <div class="d-grid">
+                      <div className="d-grid">
                         <button
                           type="submit"
-                          class="btn btn-login-register btn-block btn-lg"
+                          className="btn btn-login-register btn-block btn-lg"
                         >
-                          <i class="bi bi-person-plus-fill"></i> ثبت نام
+                          <i className="bi bi-person-plus-fill"></i> ثبت نام
                         </button>
                       </div>
                     </Form>
@@ -413,7 +413,7 @@ const SignUp = ({ session }) => {
                 }
               </Formik>
             </div>
-            <div class="col-md-6 text-center">
+            <div className="col-md-6 text-center">
               <div
                 style={{ width: "100%", height: "100%", position: "relative" }}
               >

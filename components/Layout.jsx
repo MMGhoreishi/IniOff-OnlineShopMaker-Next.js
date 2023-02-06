@@ -110,7 +110,6 @@ const Layout = ({ children }) => {
         <meta content="" name="keywords" />
 
         {/* Vendor CSS Files   */}
-        <link href="/assets/vendor/aos/aos.css" rel="stylesheet" />
         <link
           href="/assets/vendor/bootstrap/css/bootstrap.min.css"
           rel="stylesheet"
@@ -121,10 +120,6 @@ const Layout = ({ children }) => {
         />
         <link
           href="/assets/vendor/boxicons/css/boxicons.min.css"
-          rel="stylesheet"
-        />
-        <link
-          href="/assets/vendor/glightbox/css/glightbox.min.css"
           rel="stylesheet"
         />
         <link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet" />
@@ -183,7 +178,7 @@ const Layout = ({ children }) => {
                   <li>
                     <Link href={`/my-shop/${state.userPhoneNumber}`}>
                       <a className="authenticated scrollto shadow-lg">
-                        <i class="bi bi-gear-fill"></i>
+                        <i className="bi bi-gear-fill"></i>
                         {state.userName}
                       </a>
                     </Link>
@@ -194,7 +189,7 @@ const Layout = ({ children }) => {
                       onClick={signOutHandler}
                       className="logout scrollto shadow-lg border border-0"
                     >
-                      <i class="bi bi-box-arrow-right"></i>
+                      <i className="bi bi-box-arrow-right"></i>
                       خروج
                     </button>
                   </li>
@@ -204,7 +199,7 @@ const Layout = ({ children }) => {
                   <li>
                     <Link href="/account/sign-up">
                       <a className="register-login scrollto shadow-lg">
-                        <i class="bi bi-person-bounding-box"></i>
+                        <i className="bi bi-person-bounding-box"></i>
                         ساخت فروشگاه
                       </a>
                     </Link>
@@ -212,7 +207,7 @@ const Layout = ({ children }) => {
                   <li>
                     <Link href="/account/sign-in">
                       <a className="register-login scrollto shadow-lg">
-                        <i class="bi bi-door-open-fill"></i>
+                        <i className="bi bi-door-open-fill"></i>
                         ورود به فروشگاه
                       </a>
                     </Link>
@@ -245,12 +240,7 @@ const Layout = ({ children }) => {
       <BackToTopBtn />
 
       {/* Vendor JS Files */}
-      <script src="/assets/vendor/aos/aos.js"></script>
       <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-      <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
-      <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-      <script src="/assets/vendor/waypoints/noframework.waypoints.js"></script>
-      <script src="/assets/vendor/php-email-form/validate.js"></script>
 
       {/* Template Main JS File */}
       <script src="/assets/js/main.js"></script>

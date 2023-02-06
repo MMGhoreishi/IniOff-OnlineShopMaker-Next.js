@@ -148,7 +148,7 @@ const Contact = () => {
                 type="submit"
                 className="btn btn-login-register btn-block btn-lg"
               >
-                <i class="bi bi-telephone"></i> ارسال پیام
+                <i className="bi bi-telephone"></i> ارسال پیام
               </button>
             </div>
           </Form>

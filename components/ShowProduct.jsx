@@ -5,13 +5,17 @@ const ShowProduct = ({ product, userInformation }) => {
   return (
     <div className="row gy-4">
       <div className="col-lg-7">
-        <div id="product-slider" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-indicators">
+        <div
+          id="product-slider"
+          className="carousel slide"
+          data-bs-ride="carousel"
+        >
+          <div className="carousel-indicators">
             <button
               type="button"
               data-bs-target="#product-slider"
               data-bs-slide-to="0"
-              class="active"
+              className="active"
             ></button>
             <button
               type="button"
@@ -24,8 +28,8 @@ const ShowProduct = ({ product, userInformation }) => {
               data-bs-slide-to="2"
             ></button>
           </div>
-          <div class="carousel-inner">
-            <div class="carousel-item active">
+          <div className="carousel-inner">
+            <div className="carousel-item active">
               <div
                 style={{
                   position: "relative",
@@ -41,7 +45,7 @@ const ShowProduct = ({ product, userInformation }) => {
                 />
               </div>
             </div>
-            <div class="carousel-item">
+            <div className="carousel-item">
               <div
                 style={{
                   position: "relative",
@@ -57,7 +61,7 @@ const ShowProduct = ({ product, userInformation }) => {
                 />
               </div>
             </div>
-            <div class="carousel-item">
+            <div className="carousel-item">
               <div
                 style={{
                   position: "relative",

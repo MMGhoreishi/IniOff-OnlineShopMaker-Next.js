@@ -12,7 +12,7 @@ const PasswordInput = ({
           borderRadius: "0 25px 25px 0",
         }}
       >
-        <i class="bi bi-code-square"></i>
+        <i className="bi bi-code-square"></i>
       </span>
 
       {children}
@@ -24,9 +24,9 @@ const PasswordInput = ({
         onClick={passwordHandler}
       >
         {passwordEye ? (
-          <i class="bi bi-eye-slash-fill"></i>
+          <i className="bi bi-eye-slash-fill"></i>
         ) : (
-          <i class="bi bi-eye-fill"></i>
+          <i className="bi bi-eye-fill"></i>
         )}
       </span>
       {errorMsg}

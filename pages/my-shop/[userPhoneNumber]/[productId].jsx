@@ -98,9 +98,9 @@ const ProductId = ({ product, userData, getShowPermission, statusNumber }) => {
                     style={{ width: 100 }}
                     href="discount-details.html"
                     target="_blank"
-                    class="btn back m-3"
+                    className="btn back m-3"
                   >
-                    <i class="bi bi-skip-backward-fill"></i>
+                    <i className="bi bi-skip-backward-fill"></i>
                   </a>
                   {/* Nav pills */}
                   <ul className="nav nav-pills nav-justified border-top border-danger">

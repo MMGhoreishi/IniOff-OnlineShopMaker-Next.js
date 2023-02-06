@@ -16,7 +16,7 @@ const NothingFound = ({ text }) => {
         <div className="col-12">
           <div
             style={{ maxWidth: 500 }}
-            class="mx-auto alert alert-danger text-center mt-3"
+            className="mx-auto alert alert-danger text-center mt-3"
             role="alert"
           >
             {text}

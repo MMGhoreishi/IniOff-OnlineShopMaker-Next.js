@@ -7,6 +7,7 @@ import {
   AddTitle,
   Contact,
 } from "../components";
+import { connectDatabase, countProducts } from "../helpers/db-util";
 
 const ACTIONS = {
   SET_YOUR_CATEGORY: "SET_YOUR_CATEGORY",
@@ -21,7 +22,7 @@ const reducer = (state, action) => {
   }
 };
 
-const Home = () => {
+const Home = ({ numberOfproducts, statusNumber }) => {
   const [state, dispatch] = useReducer(reducer, {
     yourCategory: "",
   });
@@ -39,18 +40,10 @@ const Home = () => {
       <section id="hero" className="d-flex align-items-center">
         <div className="container">
           <div className="row">
-            <div
-              className="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
+            <div className="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1">
               <FormForSearch categoryState={state.yourCategory} />
             </div>
-            <div
-              className="col-lg-6 order-1 order-lg-2 hero-img"
-              data-aos="zoom-in"
-              data-aos-delay="200"
-            >
+            <div className="col-lg-6 order-1 order-lg-2 hero-img">
               <Image
                 src="/assets/img/hero-img.png"
                 alt="hero-img"
@@ -68,7 +61,7 @@ const Home = () => {
       </section>
       <main id="main">
         <section id="about" className="about">
-          <div className="container" data-aos="fade-up">
+          <div className="container">
             <div className="section-title">
               <h2>درباره ما</h2>
             </div>
@@ -105,22 +98,19 @@ const Home = () => {
               "linear-gradient(#b7d53daf, #b7d53ddc),  url(/assets/img/cta-bg.jpg) fixed center center",
           }}
         >
-          <div className="container" data-aos="zoom-in">
+          <div className="container">
             <div className="row">
-              <div
-                className="container aos-init aos-animate"
-                data-aos="fade-up"
-              >
+              <div className="container aos-init aos-animate">
                 <div className="section-title">
                   <h2 className="text-white">تعداد تخفیفات ثبت شده</h2>
-                  <h3>1000</h3>
+                  <h3>{numberOfproducts}</h3>
                 </div>
               </div>
             </div>
           </div>
         </section>
         <section id="rules" className="faq section-bg">
-          <div className="container" data-aos="fade-up">
+          <div className="container">
             <div className="section-title">
               <h2>قوانین</h2>
               <p>
@@ -134,7 +124,7 @@ const Home = () => {
 
             <div className="faq-list">
               <ul>
-                <li data-aos="fade-up" data-aos-delay="100">
+                <li>
                   <div className="row">
                     <div className="col-1 text-center p-0">
                       {" "}
@@ -172,7 +162,7 @@ const Home = () => {
                   </div>
                 </li>
 
-                <li data-aos="fade-up" data-aos-delay="200">
+                <li>
                   <div className="row">
                     <div className="col-1 text-center p-0">
                       {" "}
@@ -211,7 +201,7 @@ const Home = () => {
                   </div>
                 </li>
 
-                <li data-aos="fade-up" data-aos-delay="300">
+                <li>
                   <div className="row">
                     <div className="col-1 text-center p-0">
                       {" "}
@@ -249,7 +239,7 @@ const Home = () => {
                   </div>
                 </li>
 
-                <li data-aos="fade-up" data-aos-delay="400">
+                <li>
                   <div className="row">
                     <div className="col-1 text-center p-0">
                       {" "}
@@ -288,7 +278,7 @@ const Home = () => {
                   </div>
                 </li>
 
-                <li data-aos="fade-up" data-aos-delay="500">
+                <li>
                   <div className="row">
                     <div className="col-1 text-center p-0">
                       {" "}
@@ -330,7 +320,7 @@ const Home = () => {
           </div>
         </section>
         <section id="contact" className="contact">
-          <div className="container" data-aos="fade-up">
+          <div className="container">
             <div className="section-title">
               <h2>تماس با ما</h2>
               <p>
@@ -398,3 +388,31 @@ const Home = () => {
 };
 
 export default Home;
+
+export const getServerSideProps = async () => {
+  let client = null;
+  let numberOfproducts = 0;
+  let statusNumber = 200;
+
+  try {
+    client = await connectDatabase();
+  } catch (error) {
+    statusNumber = 500;
+  }
+
+  if (statusNumber != 500)
+    try {
+      numberOfproducts = await countProducts(client);
+    } catch (error) {
+      statusNumber = 500;
+    }
+
+  client.close();
+
+  return {
+    props: {
+      numberOfproducts,
+      statusNumber,
+    },
+  };
+};

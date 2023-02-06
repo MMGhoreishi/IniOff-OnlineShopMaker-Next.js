@@ -46,6 +46,15 @@ export const findProductsByCategory = async (client, category) => {
   return filteredProducts;
 };
 
+export const countProducts = async (client) => {
+  const db = await client.db(dbName);
+  const collection = await db.collection("products");
+
+  const numberOfProducts = await collection.count();
+
+  return numberOfProducts;
+};
+
 export const findProductById = async (client, _id) => {
   const db = await client.db(dbName);
   const collection = await db.collection("products");

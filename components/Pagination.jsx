@@ -12,7 +12,7 @@ const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
       <ul className="pagination pagination-circle justify-content-center">
         <li className="page-item">
           <span className="page-link" onClick={prevPage}>
-            <i class="bi bi-caret-right"></i>
+            <i className="bi bi-caret-right"></i>
           </span>
         </li>
         {pageNumbers.map((pgNumber) => (
@@ -30,7 +30,7 @@ const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
         ))}
         <li className="page-item">
           <span className="page-link" onClick={nextPage}>
-            <i class="bi bi-caret-left"></i>
+            <i className="bi bi-caret-left"></i>
           </span>
         </li>
       </ul>

@@ -548,7 +548,7 @@ const AddOrEditContent = ({
                 borderRadius: "0 25px 25px 0",
               }}
             >
-              <i class="bi bi-cash mx-1"></i> (تومان){" "}
+              <i className="bi bi-cash mx-1"></i> (تومان){" "}
             </span>
             <input
               placeholder="قیمت بدون تخفیف"
@@ -576,7 +576,7 @@ const AddOrEditContent = ({
                 borderRadius: "0 25px 25px 0",
               }}
             >
-              <i class="bi bi-cash mx-1"></i> (تومان){" "}
+              <i className="bi bi-cash mx-1"></i> (تومان){" "}
             </span>
             <input
               placeholder="قیمت با تخفیف"
@@ -599,7 +599,7 @@ const AddOrEditContent = ({
         <i className="bi bi-camera-fill"></i> تصاویر محصول شما:{" "}
       </span>
       <div className="row mt-3">
-        <div className="col-12 mb-3">
+        <div className="col-12 mb-3 upload-box pb-3 border-bottom border-3 border-warning">
           <span className="badge required">الزامی</span>
           <SingleFileUploadForm
             name="photo1"
@@ -613,7 +613,7 @@ const AddOrEditContent = ({
             <div className="alert alert-danger">تصویر محصول الزامی است</div>
           )}
         </div>
-        <div className="col-12 mb-3">
+        <div className="col-12 mb-3 upload-box pb-3 border-bottom border-3 border-warning">
           <span className="badge required">الزامی</span>
           <SingleFileUploadForm
             name="photo2"
@@ -626,7 +626,7 @@ const AddOrEditContent = ({
             <div className="alert alert-danger">تصویر محصول الزامی است</div>
           )}
         </div>
-        <div className="col-12 mb-3">
+        <div className="col-12 mb-3 upload-box pb-3 border-bottom border-3 border-warning">
           <span className="badge required">الزامی</span>
           <SingleFileUploadForm
             name="photo3"
@@ -654,13 +654,13 @@ const AddOrEditContent = ({
         <div className="alert alert-danger">توضیحات محصول الزامی است</div>
       )}
       {showEditBtn ? (
-        <div class="d-grid mt-3">
+        <div className="d-grid mt-3">
           <button
             type="submit"
-            class="btn btn-edit btn-block btn-lg"
+            className="btn btn-edit btn-block btn-lg"
             onClick={editProduct}
           >
-            <i class="bi bi-pencil-square"></i> ویرایش
+            <i className="bi bi-pencil-square"></i> ویرایش
           </button>
         </div>
       ) : (
