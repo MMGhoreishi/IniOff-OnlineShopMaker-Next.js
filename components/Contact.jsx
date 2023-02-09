@@ -10,7 +10,7 @@ const Contact = () => {
       .email("فرمت ایمیل نامعتبر است")
       .required("ایمیل ضروری است"),
 
-    subject: Yup.string().required("نام و نام خانوادگی ضروری است"),
+    subject: Yup.string().required("عنوان ضروری است"),
     message: Yup.string().required("پیام ضروری است "),
   });
 

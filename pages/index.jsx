@@ -334,7 +334,7 @@ const Home = ({ numberOfproducts, statusNumber }) => {
 
             <div className="row">
               <div className="col-lg-5 d-flex align-items-stretch">
-                <div className="info">
+                <div className="info px-5">
                   <div className="address row">
                     <div className="col-1">
                       <i className="bi bi-geo-alt"></i>
