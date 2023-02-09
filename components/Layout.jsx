@@ -10,7 +10,6 @@ import { useSession, signOut, getSession } from "next-auth/react";
 
 const ACTIONS = {
   SET_HEADER_CLASS_NAME: "SET_HEADER_CLASS_NAME",
-  SET_USER_NAME: "SET_USER_NAME",
   SET_USER_PHONENUMBER: "SET_USER_PHONENUMBER",
 };
 
@@ -18,8 +17,6 @@ const reducer = (state, action) => {
   switch (action.type) {
     case ACTIONS.SET_HEADER_CLASS_NAME:
       return { ...state, headerClassName: action.headerClassName };
-    case ACTIONS.SET_USER_NAME:
-      return { ...state, userName: action.userName };
     case ACTIONS.SET_USER_PHONENUMBER:
       return { ...state, userPhoneNumber: action.userPhoneNumber };
     default:
@@ -33,16 +30,10 @@ const Layout = ({ children }) => {
 
   const [state, dispatch] = useReducer(reducer, {
     headerClassName: "",
-    userName: "",
     userPhoneNumber: "",
   });
 
-  const setUserData = (userName, userPhoneNumber) => {
-    dispatch({
-      type: ACTIONS.SET_USER_NAME,
-      userName,
-    });
-
+  const setUserData = (userPhoneNumber) => {
     dispatch({
       type: ACTIONS.SET_USER_PHONENUMBER,
       userPhoneNumber,
@@ -65,7 +56,7 @@ const Layout = ({ children }) => {
         })
           .then((response) => response.json())
           .then((data) => {
-            setUserData(data.userData.name, data.userData.phoneNumber);
+            setUserData(data.userData.phoneNumber);
           });
       }
     });
@@ -179,7 +170,7 @@ const Layout = ({ children }) => {
                     <Link href={`/my-shop/${state.userPhoneNumber}`}>
                       <a className="authenticated scrollto shadow-lg">
                         <i className="bi bi-gear-fill"></i>
-                        {state.userName}
+                        فروشگاه شما
                       </a>
                     </Link>
                   </li>
@@ -225,14 +216,30 @@ const Layout = ({ children }) => {
       <footer id="footer">
         <div className="container footer-bottom clearfix">
           <div className="copyright">
-            &copy; Copyright{" "}
-            <strong>
-              <span>Arsha</span>
-            </strong>
-            . All Rights Reserved
+            <ul>
+              <li>
+                <a href="https://github.com/MMGhoreishi" target="_blank">
+                  <i class="bi bi-github text-muted"></i>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/mm-ghoreishi-info/"
+                  target="_blank"
+                >
+                  <i class="bi bi-linkedin text-primary"></i>
+                </a>
+              </li>
+            </ul>
           </div>
           <div className="credits">
-            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+            طراحی شده توسط{" "}
+            <a
+              href="https://www.linkedin.com/in/mm-ghoreishi-info/"
+              target="_blank"
+            >
+              محمد مهدی قریشی
+            </a>
           </div>
         </div>
       </footer>

@@ -76,7 +76,45 @@ const SignIn = ({ session }) => {
 
     const { error } = result;
 
-    if (error) return;
+    if (error) {
+      switch (error) {
+        case "The password is wrong":
+          toast.error("رمز عبور اشتباه است", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          break;
+        case "It could not find such user":
+          toast.error("فروشنده ای با چنین ایمیلی یافت نشد", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          break;
+
+        default:
+          toast.error("مشکلی پیش آمد لطفا به پشتیبانی گزارش دهید", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+      }
+
+      return;
+    }
 
     toast.success("تبریک شما با موفقیت به فروشگاه خود وارد شدید", {
       position: "top-center",
@@ -106,6 +144,7 @@ const SignIn = ({ session }) => {
   return (
     <>
       <AddTitle title="ورود به فروشگاه" />
+
       <section className="inner-page mt-5" id="login-register-section">
         <div className="container shadow-lg mt-5 py-5">
           <div className="row">

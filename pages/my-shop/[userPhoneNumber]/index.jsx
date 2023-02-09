@@ -314,11 +314,14 @@ const UserPN = ({
   };
 
   useEffect(() => {
-    const recordsPerPage = 4;
-    const indexOfLastRecord = state.currentPage * recordsPerPage;
-    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-    setProducts(products.slice(indexOfFirstRecord, indexOfLastRecord));
-    setNPages(Math.ceil(products.length / recordsPerPage));
+    if (products) {
+      const recordsPerPage = 4;
+      const indexOfLastRecord = state.currentPage * recordsPerPage;
+      const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+
+      setProducts(products.slice(indexOfFirstRecord, indexOfLastRecord));
+      setNPages(Math.ceil(products.length / recordsPerPage));
+    }
   }, [state.currentPage]);
 
   switch (state.checkUserPhoneNumberInDb) {
@@ -823,13 +826,6 @@ const UserPN = ({
           </section>
         </>
       );
-    case "Not Confirmed":
-      return (
-        <>
-          <AddTitle title="اشتباه بودن شماره موبایل" />
-          <NothingFound text="متاسفانه شماره موبایل در آدرس بار مرورگر با شماره موبایلی که با آن در سایت ثبت نام کردید مطابقت ندارد بنابراین لطفا شماره موبایل درستی را وارد کنید" />
-        </>
-      );
     case "Not SignIn":
       return (
         <>
@@ -845,7 +841,7 @@ export default UserPN;
 export const getServerSideProps = async (context) => {
   const session = await getSession({ req: context.req });
 
-  let checkUserPhoneNumberInDb = "Not Confirmed";
+  let checkUserPhoneNumberInDb = "Not SignIn";
   if (session) {
     const { userPhoneNumber } = context.params;
 
@@ -913,7 +909,6 @@ export const getServerSideProps = async (context) => {
       },
     };
   }
-  checkUserPhoneNumberInDb = "Not SignIn";
 
   return {
     props: {

@@ -1602,6 +1602,14 @@ section {
 #footer .copyright {
   float: left;
 }
+#footer .copyright ul {
+  list-style: none;
+}
+#footer .copyright ul li {
+  display: inline-block;
+  margin: 0 10px;
+  font-size: 20px;
+}
 #footer .credits {
   float: right;
   font-size: 13px;
