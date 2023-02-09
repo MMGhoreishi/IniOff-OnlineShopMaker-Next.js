@@ -8,14 +8,11 @@ import {
   ModalForSearch,
   NothingFound,
   AddTitle,
-  Pagination,
 } from "../../components";
 
 const ACTIONS = {
   SET_YOUR_CATEGORY: "SET_YOUR_CATEGORY",
   SET_YOUR_PRODUCTS: "SET_YOUR_PRODUCTS",
-  SET_CURRENT_PAGE: "SET_CURRENT_PAGE",
-  SET_N_PAGES: "SET_N_PAGES",
 };
 
 const reducer = (state, action) => {
@@ -24,10 +21,6 @@ const reducer = (state, action) => {
       return { ...state, yourCategory: action.yourCategory };
     case ACTIONS.SET_YOUR_PRODUCTS:
       return { ...state, products: action.products };
-    case ACTIONS.SET_CURRENT_PAGE:
-      return { ...state, currentPage: action.currentPage };
-    case ACTIONS.SET_N_PAGES:
-      return { ...state, nPages: action.nPages };
     default:
       return state;
   }
@@ -37,23 +30,7 @@ const Category = ({ products, category, getShowPermission, statusNumber }) => {
   const [state, dispatch] = useReducer(reducer, {
     yourCategory: null,
     products: null,
-    currentPage: 1,
-    nPages: 0,
   });
-
-  const setNPages = (nPages) => {
-    dispatch({
-      type: ACTIONS.SET_N_PAGES,
-      nPages,
-    });
-  };
-
-  const setCurrentPage = (currentPage) => {
-    dispatch({
-      type: ACTIONS.SET_CURRENT_PAGE,
-      currentPage,
-    });
-  };
 
   const setYourCategory = (yourCategory) => {
     dispatch({
@@ -71,13 +48,8 @@ const Category = ({ products, category, getShowPermission, statusNumber }) => {
 
   useEffect(() => {
     setYourCategory(category);
-
-    const recordsPerPage = 4;
-    const indexOfLastRecord = state.currentPage * recordsPerPage;
-    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-    setYourProducts(products.slice(indexOfFirstRecord, indexOfLastRecord));
-    setNPages(Math.ceil(products.length / recordsPerPage));
-  }, [state.currentPage]);
+    setYourProducts(products);
+  }, [products]);
 
   return (
     <>
@@ -160,15 +132,6 @@ const Category = ({ products, category, getShowPermission, statusNumber }) => {
                       </div>
                     </div>
                   ))}
-              </div>
-              <div className="row">
-                <div className="col text-center">
-                  <Pagination
-                    nPages={state.nPages}
-                    currentPage={state.currentPage}
-                    setCurrentPage={setCurrentPage}
-                  />
-                </div>
               </div>
             </>
           ) : (

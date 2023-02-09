@@ -10,7 +10,6 @@ import {
   AddTitle,
   ModalForDelete,
   PasswordInput,
-  Pagination,
 } from "../../../components";
 import { findUserByEmail } from "../../../helpers/auth";
 import {
@@ -28,8 +27,6 @@ const ACTIONS = {
   SET_PROFILE_VIEW: "SET_PROFILE_VIEW",
   SET_OLD_PASSWORD_EYE: "SET_OLD_PASSWORD_EYE",
   SET_NEW_PASSWORD_EYE: "SET_NEW_PASSWORD_EYE",
-  SET_CURRENT_PAGE: "SET_CURRENT_PAGE",
-  SET_N_PAGES: "SET_N_PAGES",
 };
 
 const reducer = (state, action) => {
@@ -46,10 +43,6 @@ const reducer = (state, action) => {
       return { ...state, oldPasswordEye: action.oldPasswordEye };
     case ACTIONS.SET_NEW_PASSWORD_EYE:
       return { ...state, newPasswordEye: action.newPasswordEye };
-    case ACTIONS.SET_CURRENT_PAGE:
-      return { ...state, currentPage: action.currentPage };
-    case ACTIONS.SET_N_PAGES:
-      return { ...state, nPages: action.nPages };
     default:
       return state;
   }
@@ -74,24 +67,7 @@ const UserPN = ({
 
     oldPasswordEye: true,
     newPasswordEye: true,
-
-    currentPage: 1,
-    nPages: 0,
   });
-
-  const setNPages = (nPages) => {
-    dispatch({
-      type: ACTIONS.SET_N_PAGES,
-      nPages,
-    });
-  };
-
-  const setCurrentPage = (currentPage) => {
-    dispatch({
-      type: ACTIONS.SET_CURRENT_PAGE,
-      currentPage,
-    });
-  };
 
   const setProducts = (products) => {
     dispatch({
@@ -314,15 +290,8 @@ const UserPN = ({
   };
 
   useEffect(() => {
-    if (products) {
-      const recordsPerPage = 4;
-      const indexOfLastRecord = state.currentPage * recordsPerPage;
-      const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-
-      setProducts(products.slice(indexOfFirstRecord, indexOfLastRecord));
-      setNPages(Math.ceil(products.length / recordsPerPage));
-    }
-  }, [state.currentPage]);
+    setProducts(products);
+  }, [products]);
 
   switch (state.checkUserPhoneNumberInDb) {
     case "Confirmed":
@@ -770,14 +739,6 @@ const UserPN = ({
                                   })}
                                 </tbody>
                               </table>
-                            </div>
-
-                            <div className=" text-center">
-                              <Pagination
-                                nPages={state.nPages}
-                                currentPage={state.currentPage}
-                                setCurrentPage={setCurrentPage}
-                              />
                             </div>
                           </>
                         ) : (
